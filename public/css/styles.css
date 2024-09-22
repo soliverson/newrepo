@@ -1,4 +1,3 @@
-/******* Change Box Model ***************/
 *,
 *:before,
 *:after {
@@ -7,20 +6,21 @@
 
 body {
   background-image: url('/images/site/checkerboard.jpg');
-  background-size: cover; 
+  background-size: cover;
   background-repeat: no-repeat;
-  background-attachment: fixed; 
+  background-attachment: fixed;
   background-position: center;
+  margin: 0;
 }
 
 nav {
   background-color: black;
   color: white;
-  padding: 10px 20px; 
+  padding: 10px 20px;
   border-radius: 0px;
   position: relative;
   top: 20px;
-  display: flex; 
+  display: flex;
   justify-content: space-around;
 }
 
@@ -28,17 +28,20 @@ nav a {
   color: white;
   text-decoration: none;
   font-size: 16px;
+  margin: 0 25px;
 }
 
 nav ul {
-  display: flex; /* Use Flexbox to align items horizontally */
-  list-style: none; /* Remove bullet points */
-  padding: 0; /* Remove default padding */
-  margin: 0; /* Remove default margin */
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  justify-content: space-between;
 }
 
 nav li {
-  margin: 0 15px; 
+  margin: 0 25px;
 }
 
 #top-header {
@@ -55,7 +58,6 @@ nav li {
   font-family: sans-serif;
 }
 
-
 a {
   text-decoration: none;
   color: inherit;
@@ -63,8 +65,8 @@ a {
 
 #tools a {
   font-size: 16px;
-  text-decoration: none; 
-  color: inherit; 
+  text-decoration: none;
+  color: inherit;
 }
 
 #wrapper {
@@ -77,17 +79,121 @@ a {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.welcome-heading{
+.welcome-heading {
   margin-top: 40px;
 }
 
 .image-container {
   display: flex;
-  justify-content: center; 
-  margin-top: 10px; 
+  justify-content: center;
+  margin-top: 10px;
+  order: 2; 
 }
 
 .image-container img {
-  max-width: 100%; 
-  height: auto; 
+  max-width: 100%;
+  height: auto;
+}
+
+.info-box {
+  position: absolute;
+  top: 240px;
+  left: 30%;
+  transform: translateX(-50%);
+  background-color: rgba(255, 255, 255, 0.4);
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 300px;
+  text-align: center;
+  z-index: 10;
+  color: #0c8fe0;
+  font-weight: bold;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  order: 1; 
+}
+
+.image-link {
+  display: block;
+  position: relative;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.image-link img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.columns-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  margin-top: 30px;
+}
+
+.column {
+  flex: 1;
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.8); 
+}
+
+.upgrades-column .upgrade-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.upgrades-column a {
+  text-align: center;
+  text-decoration: underline;
+  color: blue;
+}
+
+.upgrades-column img {
+  width: 100px;
+  height: 100px;
+  background-color: lightskyblue;
+  padding: 10px;
+}
+
+.upgrades-column img:hover {
+  transform: scale(1.05);
+}
+
+.reviews-column ul {
+  list-style: none;
+  padding: 0;
+}
+
+.reviews-column li {
+  margin-bottom: 10px;
+  padding-left: 20px;
+  position: relative;
+}
+
+.reviews-column li::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: #333;
+}
+
+@media screen and (max-width: 767px) {
+  .columns-container {
+    flex-direction: column;
+  }
+
+  .info-box {
+    position: relative; 
+    margin: -10px auto 250px auto; 
+    max-width: 90%; 
+    left: auto;
+    transform: none; 
+    order: 1; 
+  }
+
+  .image-container {
+    order: 2;
+  }
 }
