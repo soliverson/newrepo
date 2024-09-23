@@ -180,13 +180,35 @@ a {
 }
 
 @media screen and (max-width: 767px) {
+  nav {
+    padding: 5px 10px;
+    flex-direction: row; /* Keep items in a row */
+  }
+
+  nav a {
+    font-size: 14px; /* Shrink the font size */
+    margin: 0 10px; /* Reduce the margin between items */
+  }
+
+  nav ul {
+    flex-wrap: wrap; /* Allow items to wrap if needed */
+    justify-content: center; /* Center the navigation items */
+  }
+
+  #top-header {
+    flex-direction: column; /* Adjust the top header if needed */
+    font-size: 20px; /* Reduce the font size */
+    align-items: center;
+    text-align: center;
+  }
+
   .columns-container {
     flex-direction: column;
   }
 
   .info-box {
     position: relative; 
-    margin: -10px auto 250px auto; 
+    margin: -10px auto 400px auto; 
     max-width: 90%; 
     left: auto;
     transform: none; 
