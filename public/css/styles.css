@@ -244,10 +244,88 @@ nav li {
   background-color: #005bb5; /* Darker shade for hover */
 }
 
+/* Vehicle Detail Container */
+.vehicle-detail-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 30px;
+  padding: 70px;
+  margin: 0 auto;
+  max-width: 1100px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Vehicle Image Styling */
+.vehicle-image {
+  flex: 1;
+  max-width: 400px; 
+}
+
+.vehicle-image img {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* Vehicle Info (Description, Price, Title, etc.) */
+.vehicle-info {
+  flex: 2; /* Make the text section take more space */
+  margin-left: 20px; /* Space between image and text */
+}
+
+.vehicle-info h1 {
+  font-size: 2.4em;
+  font-weight: bold;
+  color: black;
+  margin-bottom: 10px;
+}
+
+.vehicle-price {
+  font-size: 1.5em;
+  font-weight: bold;
+  color: #000c1a; /* Darker color for the price */
+  margin-bottom: 10px;
+}
+
+.vehicle-description {
+  font-size: 1.1em;
+  line-height: 1.5;
+  color: black;
+  margin-bottom: 15px;
+}
+
+.vehicle-details {
+  font-size: 1.1em;
+  color: black;
+}
+
+.vehicle-details p {
+  margin: 8px 0;
+}
+
+.vehicle-details strong {
+  font-weight: bold;
+}
+
+/* Back Link Styling */
+.back-link {
+  display: block;
+  margin-top: 20px;
+  font-size: 1em;
+  color: #1600db;
+  text-decoration: none;
+}
+
+.back-link:hover {
+  text-decoration: underline;
+}
+
 /*******************************************************
-  *
   *              Media Queries for Responsive Design
-  *
 ********************************************************/
 
 /* Mobile screens (small sizes) */

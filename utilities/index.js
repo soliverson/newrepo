@@ -73,6 +73,11 @@ Util.buildVehicleDetailView = async function(vehicle) {
     if (vehicle) {
         detailView += '<div class="vehicle-detail-container">'; // Updated class name
         
+        // Vehicle image
+        detailView += '<div class="vehicle-image">';
+        detailView += '<img src="' + vehicle.inv_image + '" alt="Image of ' + vehicle.inv_make + ' ' + vehicle.inv_model + ' on CSE Motors" />';
+        detailView += '</div>'; // Close vehicle-image div
+                
         // Vehicle title
         detailView += '<div class="vehicle-info">';
         detailView += '<h1>' + vehicle.inv_make + ' ' + vehicle.inv_model + '</h1>';
@@ -96,11 +101,7 @@ Util.buildVehicleDetailView = async function(vehicle) {
         detailView += '<a href="/inv/trigger-error" class="back-link">Error Link</a>';
         detailView += '</div>'; // Close vehicle-info div
         
-        // Vehicle image
-        detailView += '<div class="vehicle-image">';
-        detailView += '<img src="' + vehicle.inv_image + '" alt="Image of ' + vehicle.inv_make + ' ' + vehicle.inv_model + ' on CSE Motors" />';
-        detailView += '</div>'; // Close vehicle-image div
-        
+
         
         
         
