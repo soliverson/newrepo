@@ -64,9 +64,9 @@ Util.buildClassificationGrid = async function (data) {
     return grid
 }
 
-/* **************************************
+/* *************************************
 * Build the vehicle detail view HTML
-* ************************************ */
+* *********************************** */
 Util.buildVehicleDetailView = async function(vehicle) {
     let detailView = '';
 
