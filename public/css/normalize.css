@@ -1,0 +1,34 @@
+/* normalize.css */
+
+/* Reset and box-sizing rules */
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  background-color: #f4f4f4;
+  background-image: url('/images/site/small_check.jpg');
+  color: #333;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background-size: cover;
+}
+
+/* Default wrapper settings */
+#wrapper {
+  background-color: white;
+  padding: 20px;
+  margin: auto;
+  max-width: 1200px;
+}
+
+/* General links styling */
+a {
+  text-decoration: none;
+  color: inherit;
+}

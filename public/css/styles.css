@@ -1,9 +1,7 @@
-*,
-*:before,
-*:after {
-  box-sizing: border-box;
-}
 
+/*******************************************************
+  *              General Body Styling
+********************************************************/
 body {
   background-image: url('/images/site/checkerboard.jpg');
   background-size: cover;
@@ -13,11 +11,30 @@ body {
   margin: 0;
 }
 
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+#wrapper {
+  background-color: white;
+  margin: 30px auto;
+  padding: 5px;
+  max-width: 1200px;
+  border: 7px solid lightskyblue;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/*******************************************************
+  *
+  *              Header and Navigation Styling
+  *
+********************************************************/
 nav {
   background-color: black;
   color: white;
   padding: 10px 20px;
-  border-radius: 0px;
   position: relative;
   top: 20px;
   display: flex;
@@ -53,114 +70,145 @@ nav li {
   font-family: sans-serif;
 }
 
-.siteName {
-  flex: 1;
-  font-family: sans-serif;
+/*******************************************************
+  *
+  *              Grid and Image Styling
+  *
+********************************************************/
+/* Grid container for vehicle listings */
+#inv-display {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+  list-style: none; /* Remove bullets */
+  padding: 0;
+  margin: 0;
 }
 
-a {
-  text-decoration: none;
-  color: inherit;
+/* Individual grid items (vehicles) */
+#inv-display li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+  text-align: center;
+  padding: 15px; /* Add padding inside each grid item */
 }
 
-#tools a {
-  font-size: 16px;
-  text-decoration: none;
-  color: inherit;
+#inv-display li:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
-#wrapper {
-  background-color: white;
-  margin: 30px auto;
-  padding: 5px;
-  max-width: 1200px;
-  border: 7px solid lightskyblue;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+/* Image styling for vehicles */
+#inv-display img {
+  width: 100%;
+  height: auto;
+  margin: 0 auto;
+  padding: 10px; /* Padding between image and frame */
 }
 
-.welcome-heading {
-  margin-top: 40px;
+/* Vehicle name and price styling */
+.namePrice {
+  padding: 10px;
+  text-align: center;
 }
 
+.namePrice h2 {
+  font-size: 1.2em;
+  margin: 10px 0;
+}
+
+.namePrice span {
+  font-size: 1.1em;
+  font-weight: bold;
+  color: black;
+}
+
+/*******************************************************
+  *
+  *              Image and Content Containers
+  *
+********************************************************/
 .image-container {
+  position: relative;
   display: flex;
   justify-content: center;
-  margin-top: 10px;
-  order: 2; 
+  align-items: center;
+  margin-top: 20px;
 }
 
 .image-container img {
   max-width: 100%;
   height: auto;
+  display: block;
 }
 
 .info-box {
   position: absolute;
-  top: 240px;
-  left: 30%;
-  transform: translateX(-50%);
-  background-color: rgba(255, 255, 255, 0.4);
+  top: 60%; 
+  left: 30%; 
+  transform: translate(-50%, -50%); 
+  background-color: rgba(255, 255, 255, 0.8); 
   padding: 20px;
   border-radius: 8px;
+  text-align: center;
   max-width: 300px;
-  text-align: center;
-  z-index: 10;
-  color: #0c8fe0;
-  font-weight: bold;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  order: 1; 
+}
+.info-box h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+  color: #0c8fe0;
 }
 
-.image-link {
-  display: block;
-  position: relative;
-  text-align: center;
-  margin-top: 20px;
-}
-
-.image-link img {
-  max-width: 100%;
-  height: auto;
-  border-radius: 8px;
-}
-
+/* Upgrades and Reviews Styleing */
 .columns-container {
   display: flex;
   justify-content: space-between;
-  gap: 20px;
+  gap: 20px; /* Space between the two columns */
   margin-top: 30px;
 }
 
+/* Columns Style */
 .column {
   flex: 1;
   padding: 20px;
   background-color: rgba(255, 255, 255, 0.8); 
+  border-radius: 8px;
 }
 
-.upgrades-column .upgrade-grid {
+/* Upgrade Grid (2x2) */
+.upgrade-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
+  grid-template-columns: repeat(2, 1fr); /* 2 columns */
+  gap: 20px; /* Space between grid items */
 }
 
-.upgrades-column a {
+.upgrade-grid a {
   text-align: center;
-  text-decoration: underline;
-  color: blue;
+  text-decoration: none;
 }
 
-.upgrades-column img {
+.upgrade-grid img {
   width: 100px;
   height: 100px;
   background-color: lightskyblue;
   padding: 10px;
+  border-radius: 8px;
 }
 
-.upgrades-column img:hover {
-  transform: scale(1.05);
+.upgrade-grid p {
+  margin-top: 10px;
+  font-size: 16px;
+  color: #333;
 }
 
+/* Review Column Style */
 .reviews-column ul {
   list-style: none;
   padding: 0;
@@ -168,54 +216,127 @@ a {
 
 .reviews-column li {
   margin-bottom: 10px;
-  padding-left: 20px;
-  position: relative;
-}
-
-.reviews-column li::before {
-  content: '•';
-  position: absolute;
-  left: 0;
+  font-size: 16px;
+  line-height: 1.5;
   color: #333;
 }
 
-@media screen and (max-width: 767px) {
+/* Responsive Design */
+@media only screen and (max-width: 768px) {
+  .columns-container {
+    flex-direction: column; /* Stack the columns on smaller screens */
+  }
+}
+
+/* Button Styling */
+.own-today-btn {
+  background-color: #0c8fe0;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 10px;
+  font-size: 16px;
+}
+
+.own-today-btn:hover {
+  background-color: #005bb5; /* Darker shade for hover */
+}
+
+/*******************************************************
+  *
+  *              Media Queries for Responsive Design
+  *
+********************************************************/
+
+/* Mobile screens (small sizes) */
+@media only screen and (max-width: 600px) {
+
+  body {
+    background-image: url('/images/site/checkerboard.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+    margin: 0;
+  }
+
+  #wrapper {
+    background-color: white;
+    padding: 10px;
+    margin: 0;
+    width: 100%;
+  }
+
   nav {
     padding: 5px 10px;
-    flex-direction: row; /* Keep items in a row */
+    flex-direction: row;
   }
 
   nav a {
-    font-size: 14px; /* Shrink the font size */
-    margin: 0 10px; /* Reduce the margin between items */
+    font-size: 14px;
+    margin: 0 10px;
   }
 
   nav ul {
-    flex-wrap: wrap; /* Allow items to wrap if needed */
-    justify-content: center; /* Center the navigation items */
+    flex-wrap: wrap;
+    justify-content: center;
   }
 
   #top-header {
-    flex-direction: column; /* Adjust the top header if needed */
-    font-size: 20px; /* Reduce the font size */
+    flex-direction: column;
+    font-size: 20px;
     align-items: center;
     text-align: center;
   }
 
-  .columns-container {
-    flex-direction: column;
+  #inv-display {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Tablet screens (medium sizes) */
+@media only screen and (max-width: 1024px) {
+
+  body {
+    background-image: url('/images/site/checkerboard.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+    margin: 0;
   }
 
-  .info-box {
-    position: relative; 
-    margin: -10px auto 400px auto; 
-    max-width: 90%; 
-    left: auto;
-    transform: none; 
-    order: 1; 
+  #wrapper {
+    background-color: white;
+    padding: 10px;
+    margin: 0;
+    width: 100%;
   }
 
-  .image-container {
-    order: 2;
+  nav {
+    padding: 10px;
+  }
+
+  nav a {
+    font-size: 16px;
+    padding: 5px 10px;
+  }
+
+  nav ul {
+    font-size: 16px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 0;
+  }
+
+  nav ul li {
+    margin: 0;
+  }
+
+  #inv-display {
+    grid-template-columns: 1fr 1fr;
   }
 }
