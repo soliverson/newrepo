@@ -190,3 +190,109 @@ header {
     color: white;
   }
   
+  /*******************************************************
+ *
+ *              Form Area Styles
+ *
+ ********************************************************/
+.form-title {
+  text-align: center;
+  font-size: 2em;
+  color: #333;
+  margin-bottom: 20px;
+  font-family: 'Arial', sans-serif;
+}
+
+.form-container {
+  max-width: 400px;
+  margin: 50px auto;
+  padding: 20px;
+  border: 1px solid #007bff;
+  border-radius: 8px;
+  background-color: #dfe3e6;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-input {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  transition: border-color 0.3s ease;
+}
+
+.form-input:focus {
+  border-color: #007bff;
+  outline: none;
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.25);
+}
+
+.form-button {
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.form-button:hover {
+  background-color: #0056b3;
+}
+
+/*******************************************************
+ *
+ *              Flash Messages
+ *
+ ********************************************************/
+.notice,
+.error_notice {
+  color: red;
+  font-size: 20px;
+}
+
+/*******************************************************
+ *
+ *              Additional Styles for Registration Form
+ *
+ ********************************************************/
+.registration-heading {
+  text-align: center;
+  color: #a10c0c;
+  font-size: 1.5em;
+  margin-bottom: 20px;
+}
+
+span {
+  display: block;
+  margin-top: 5px;
+  font-size: 14px;
+  color: #555;
+  background-color: #f9f9f9;
+  padding: 10px;
+  border-left: 4px solid #007BFF;
+  border-radius: 4px;
+}
+
+input:required:invalid,
+input:focus:invalid {
+  background-image: url(/images/site/invalid.png);
+  background-position: right top;
+  background-repeat: no-repeat;
+  background-size: 30px 30px;
+}
+
+input:required:valid {
+  background-image: url(/images/site/valid.webp);
+  background-position: right top;
+  background-repeat: no-repeat;
+  background-size: 30px 30px;
+}

@@ -418,3 +418,28 @@ nav li {
     grid-template-columns: 1fr 1fr;
   }
 }
+@media screen and (max-width: 480px) {
+  .login-form {
+    max-width: 100%;
+    /* Allow form to take full width on small screens */
+    margin: 10px;
+    /* Adjust margins for small screens */
+    padding: 10px;
+    /* Reduce padding further on small screens */
+  }
+
+  .login-title {
+    font-size: 1.3em;
+    /* Further decrease font size for very small screens */
+  }
+}
+
+@media (max-width: 768px) {
+  .registration-form {
+    padding: 15px;
+  }
+
+  .registration-input {
+    font-size: 0.9rem;
+  }
+}
