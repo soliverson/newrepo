@@ -1,58 +1,111 @@
 const utilities = require("../utilities");
 const accountModel = require('../models/account-model');
+const bcrypt = require("bcryptjs");
+const { body, validationResult } = require('express-validator');
 
 /* ****************************************
  *  Deliver login view
  * *************************************** */
 async function buildLogin(req, res, next) {
   try {
-    let nav = await utilities.getNav(); // Fetch navigation data
+    let nav = await utilities.getNav(); // Wait for navigation data
     res.render('account/login', {
       title: 'Login',
       nav,
-      errors: null // Initially no errors
+      errors: null // Pass null errors initially
     });
   } catch (error) {
     console.error("Error rendering login page:", error);
-    next(error); // Pass error to the error handler
+    next(error);
   }
 }
 
 /* ****************************************
-*  Deliver registration view
-* *************************************** */
+ *  Deliver registration view
+ * *************************************** */
 async function buildRegister(req, res, next) {
-    let nav = await utilities.getNav()
-    res.render("account/register", {
-      title: "Register",
+  try {
+    let nav = await utilities.getNav(); // Wait for navigation data
+    res.render('account/register', {
+      title: 'Register',
       nav,
-      errors: null,
-    })
+      errors: null, // Pass null errors initially
+      account_firstname: '', // Initialize as empty
+      account_lastname: '',  // Initialize as empty
+      account_email: ''      // Initialize as empty
+    });
+  } catch (error) {
+    console.error("Error rendering registration page:", error);
+    next(error);
   }
-  
+}
+
+/* ****************************************
+ *  Validation Rules for Registration
+ * *************************************** */
+const validateRegistration = [
+  body('account_firstname').notEmpty().withMessage('First name is required'),
+  body('account_lastname').notEmpty().withMessage('Last name is required'),
+  body('account_email').isEmail().withMessage('Enter a valid email')
+    .custom(async (account_email) => {
+      const emailExists = await accountModel.checkExistingEmail(account_email);
+      if (emailExists) {
+        throw new Error("Email already exists. Please use a different email.");
+      }
+    }),
+  body('account_password').isLength({ min: 12 }).withMessage('Password must be at least 12 characters long')
+];
 
 /* ****************************************
  *  Process Registration
  * *************************************** */
 async function registerAccount(req, res) {
-  let nav = await utilities.getNav();
-  const { account_firstname, account_lastname, account_email, account_password } = req.body;
+  let nav = await utilities.getNav(); // Fetch navigation
+  const errors = validationResult(req);
+
+  // Handle form validation errors
+  if (!errors.isEmpty()) {
+    const { account_firstname, account_lastname, account_email } = req.body;  // Extract form inputs
+    return res.status(400).render("account/register", {
+      title: "Register",
+      nav,
+      errors: errors.array(),
+      account_firstname,  // Pass form input back
+      account_lastname,   // Pass form input back
+      account_email       // Pass form input back
+    });
+  }
+
+  const { account_firstname, account_lastname, account_email, account_password } = req.body; // Extract form data
+
+  // Hash the password before storing
+  let hashedPassword;
+  try {
+    hashedPassword = await bcrypt.hash(account_password, 10); // Asynchronous hash
+  } catch (error) {
+    req.flash("notice", 'Sorry, there was an error processing the registration.');
+    return res.status(500).render("account/register", {
+      title: "Registration",
+      nav,
+      errors: null
+    });
+  }
 
   try {
-    // Call the model to insert new account into the database
+    // Insert the new account into the database
     const regResult = await accountModel.registerAccount(
       account_firstname,
       account_lastname,
       account_email,
-      account_password
+      hashedPassword
     );
 
-    if (regResult.rowCount) { // Check if the registration was successful
-      req.flash('notice', `Congratulations, you're registered ${account_firstname}. Please log in.`);
-      res.status(201).render("account/login", {
+    if (regResult.rowCount) {
+      req.flash('notice', `Congratulations, ${account_firstname}! You have successfully registered.`);
+      return res.status(201).render("account/login", {
         title: "Login",
         nav,
-        errors: null // No errors to display
+        errors: null
       });
     } else {
       throw new Error("Registration failed.");
@@ -60,10 +113,10 @@ async function registerAccount(req, res) {
   } catch (error) {
     console.error("Error processing registration:", error);
     req.flash("error_notice", "Sorry, the registration failed.");
-    res.status(501).render("account/register", {
+    return res.status(501).render("account/register", {
       title: "Registration",
       nav,
-      errors: error.message // Pass the error message to the view
+      errors: [{ msg: error.message }]
     });
   }
 }
@@ -75,24 +128,21 @@ async function processLogin(req, res) {
   let nav = await utilities.getNav();
   const { account_email, account_password } = req.body;
 
-  // Here you would implement your authentication logic (e.g., check credentials)
-
   try {
-    // For now, simulate a login success for demonstration
-    // You can later expand this by querying your database and comparing hashed passwords
+    // Simulate login logic for now
     req.flash('notice', `Welcome back! You've successfully logged in.`);
-    res.status(200).render('account/dashboard', {
+    return res.status(200).render('account/dashboard', {
       title: "Dashboard",
       nav,
-      errors: null // No errors to display
+      errors: null
     });
   } catch (error) {
     console.error("Error processing login:", error);
     req.flash("error_notice", "Login failed. Please try again.");
-    res.status(500).render('account/login', {
+    return res.status(500).render('account/login', {
       title: "Login",
       nav,
-      errors: error.message // Pass the error message to the view
+      errors: [{ msg: error.message }]
     });
   }
 }
@@ -103,6 +153,7 @@ async function processLogin(req, res) {
 module.exports = {
   buildLogin,
   buildRegister,
+  validateRegistration,
   registerAccount,
-  processLogin // Don't forget to export the login processing function
+  processLogin
 };
