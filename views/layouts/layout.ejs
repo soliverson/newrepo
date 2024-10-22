@@ -4,14 +4,19 @@
 
 <body>
     <div id="wrapper">
-        <%- include('../partials/header') %>
-        <%- include('../partials/navigation') %>
+      <%- include('../partials/header') %> 
+      <%- include('../partials/navigation') %>
 
         <main>
-            <%- body %>
+          <%- body %>
         </main>
 
-        <%- include('../partials/footer') %>
+      <% 
+        
+        const d = new Date(); 
+        const year = d.getFullYear(); 
+      %>
+      <%- include('../partials/footer', { year: year }) %>
     </div>
 </body>
 </html>

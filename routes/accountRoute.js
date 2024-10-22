@@ -1,66 +1,51 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const accountController = require("../controllers/accountController"); 
-const utilities = require("../utilities");
+const accountController = require('../controllers/accountController');
+const utilities = require('../utilities');
+const regValidate = require('../utilities/account-validation');
 
-// GET route for rendering the login page
-router.get("/login", async (req, res) => {
-    const nav = await utilities.getNav(req, res); // Fetch the navigation for the page
-    res.render("account/login", {
-        title: "Login",
-        nav
-    });
-});
+// Route to deliver login view
+router.get("/login", utilities.handleErrors(accountController.buildLogin)); // Accessed via /account/login
+router.get('/logout', accountController.logout);
 
-// GET route for rendering the registration page
-router.get("/register", async (req, res) => {
-    const nav = await utilities.getNav(req, res); // Fetch the navigation
-    res.render("account/register", {
-        title: "Register",
-        nav,
-        errors: [], // Ensure errors is defined, even if empty
-        account_firstname: '', // Provide empty values for the form fields
-        account_lastname: '',
-        account_email: ''
-    });
-});
+// Route to deliver register view
+router.get("/register", utilities.handleErrors(accountController.buildRegister)); // Accessed via /account/register
 
-// POST route for processing the login form submission
-router.post("/login", utilities.handleErrors(accountController.login));
+// Process the registration data
+router.post(
+    "/register",
+    regValidate.registationRules(),
+    regValidate.checkRegData,
+    utilities.handleErrors(accountController.registerAccount)
+)
 
-// POST route for processing the registration form submission
-router.post("/register", utilities.handleErrors(async (req, res) => {
-    const { account_firstname, account_lastname, account_email, account_password } = req.body;
-    const nav = await utilities.getNav(req, res);
+// Route to process the registration form with error handling
+router.post('/register', utilities.handleErrors(accountController.registerAccount));
 
-    const errors = [];
+// Process the login route
+router.post(
+    "/login",
+    regValidate.loginRules(),          // Validate login data
+    regValidate.checkLoginData,        // Check for validation errors
+    utilities.handleErrors(accountController.accountLogin)     // Handle login logic
+);
 
-    // Basic validation (expand this as needed)
-    if (!account_firstname) {
-        errors.push({ msg: "First name is required" });
-    }
-    if (!account_lastname) {
-        errors.push({ msg: "Last name is required" });
-    }
-    if (!account_email) {
-        errors.push({ msg: "Email is required" });
-    }
+router.get('/',
+    utilities.checkLogin,
+    accountController.accountManagementView);
 
-    // If there are errors, re-render the form with the errors and user input
-    if (errors.length > 0) {
-        return res.render("account/register", {
-            title: "Register",
-            nav,
-            errors,
-            account_firstname,
-            account_lastname,
-            account_email
-        });
-    }
+// GET route to deliver the account update view
+router.get('/update/:account_id', 
+    utilities.handleErrors(accountController.getAccountUpdateView));
 
-    // Continue with registration logic if no errors (e.g., saving to database)
-    await accountController.register(req, res);
-}));
+// POST route to process account updates
+router.post('/update/:account_id', 
+    regValidate.validateUpdate, 
+    utilities.handleErrors(accountController.processAccountUpdate));
 
-// Export the router
+// POST route to process password updates
+router.post('/update-password', 
+    regValidate.validatePassword, 
+    utilities.handleErrors(accountController.processPasswordUpdate));
+    
 module.exports = router;
