@@ -1,39 +1,26 @@
+
 <% if (title) { %>
-    <h1 class="man-title">
-        <%= title %>
-    </h1>
-    <% } else { %>
-        <h1 class="man-title">Vehicle Management</h1>
-        <% } %>
-
-            <% if (Array.isArray(messages) && messages.length> 0) { %>
-                <div class="flash-messages">
-                    <% messages.forEach(function(message) { %>
-                        <div class="flash-message notice">
-                            <p>
-                                <%= message %>
-                            </p>
-                        </div>
-                        <% }); %>
-                </div>
-                <% } %>
-                    <main class="management-page">
-
-                        <div class="management-page__links">
-                            <a href="inv/add-classification" class="management-page__btn">Add New Classification</a>
-                            <a href="inv/add-vehicle" class="management-page__btn">Add New Vehicle</a>
-                        </div>
-
-                        <a href="#" class="management-page__error-link">Error Link</a>
-
-                        <table id="inventoryDisplay"></table>
-
-                        <p>Choose the Classification to see those inventory items</p>
-
-                        <%- classificationSelect %>
-
-                            <noscript>JavaScript must be enabled to use this page.</noscript>
-
-                            <script src="../../js/inventory.js"></script>
-
-                    </main>
+    <h1><%= title %></h1>
+    <% } else { res.redirect('/') } %> <%- messages() %> <% if (errors) { %>
+    <ul class="notice">
+      <% errors.array().forEach(error => { %>
+      <li><%= error.msg %></li>
+      <% }) %>
+    </ul>
+    <% } %>
+    
+    <div class="inv-menu">
+      <a href="/inv/add-classification">Add new classification</a>
+      <a href="/inv/add-inventory">Add new inventory</a>
+    </div>
+    <h2>Manage Inventory</h2>
+    <p>
+      Select a classification from the list to see the items belonging to the
+      classification
+    </p>
+    <%- classificationSelect %>
+    <table id="inventoryDisplay"></table>
+    <noscript>JavaScript must be enabled to use this page.</noscript>
+    
+    <script src="../../js/inventory.js"></script>
+    

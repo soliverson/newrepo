@@ -1,30 +1,54 @@
 <% if (title) { %>
-    <h1 class="cla-title">
-        <%= title %>
-    </h1>
-<% } else { %>
-    <h1 class="cla-title">Add New Classification</h1>
-<% } %>
-
-<%- messages() %>
-
-<main class="classification-page">
-    <section class="classification-page__form-container">
-        <p class="classification-page__required-text">Field is required.</p>
-        <form id="classification-form" action="/classification/add" method="POST"
-              onsubmit="return validateForm()">
-            <label for="classification_name" class="classification-page__label">Classification Name</label>
-            <p class="classification-page__description">Name must be alphabetic characters only and cannot
-                contain spaces.</p>
-            <input type="text" id="classification_name" name="classification_name"
-                   class="classification-page__input" required 
-                   pattern="^[A-Za-z]+$" 
-                   title="Please enter alphabetic characters only (no spaces or numbers)" 
-                   oninput="preventSpaces(event)">
-
-            <button type="submit" class="classification-page__btn">Add Classification</button>
-        </form>
-    </section>
-    <a href="#" class="classification-page__error-link">Error Link</a>
-</main>
-        <script src="/js/script.js"></script>
+    <h1><%= title %></h1>
+    <% } else { res.redirect('/') } %> <%- messages() %> <% if (errors) { %>
+    <ul class="notice">
+      <% errors.array().forEach(error => { %>
+      <li><%= error.msg %></li>
+      <% }) %>
+    </ul>
+    <% } %>
+    
+    <p>Confirm Deletion - The delete is permanent.</p>
+    
+    <div class="form-shape add-inventory">
+      <form action="/inv/delete-vehicle" method="post" id="carForm">
+        <label
+          >Make:<input
+            type="text"
+            name="inv_make"
+            required
+            value="<%= locals.inv_make %>"
+            readonly
+        /></label>
+        <label
+          >Model:<input
+            type="text"
+            name="inv_model"
+            required
+            value="<%= locals.inv_model %>"
+            readonly
+        /></label>
+        <label
+          >Year:<input
+            type="text"
+            name="inv_year"
+            required
+            pattern="^\d+$"
+            minlength="4"
+            maxlength="4"
+            value="<%= locals.inv_year %>"
+            readonly
+        /></label>
+        <label
+          >Price:<input
+            type="number"
+            name="inv_price"
+            required
+            value="<%= locals.inv_price %>"
+            readonly
+        /></label>
+        <button type="submit">Delete Vehicle</button>
+        <input type="hidden" name="inv_id" <% if(locals.inv_id){%>
+        value="<%=locals.inv_id %>" <% } %>>
+      </form>
+    </div>

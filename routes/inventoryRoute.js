@@ -1,99 +1,87 @@
-const express = require("express");
+// Needed Resources
+const express = require('express');
 const router = new express.Router();
-const invController = require("../controllers/invController");
+const invController = require('../controllers/invController');
 const utilities = require('../utilities');
-const regValidate = require('../utilities/account-validation');
-const validate = require("../utilities/account-validation");
+const classValidate = require('../utilities/classification-validation');
+const invenValidate = require('../utilities/inventory-validation');
 
-// Middleware for flash messages
-const flashMiddleware = (req, res, next) => {
-    res.locals.flashMessage = req.flash('messages');
-    next();
-};
-
-// Apply flash middleware to all routes in inventoryRoute.js
-router.use(flashMiddleware);
-
-// Vehicle Routes
-
-router.get("/type/:classificationId", utilities.handleErrors(invController.buildByClassificationId));
-
-router.get("/detail/:invId", utilities.handleErrors(invController.getVehicleDetails));
-router.get('/trigger-error', invController.triggerServerError); // Route to trigger a server error
-
-router.get('/add-vehicle',
-    utilities.checkJWTToken,
-    utilities.checkLogin,
-    invController.verifyEmployeeOrAdmin,
-    utilities.handleErrors(invController.renderAddVehicleForm)
-); // GET route for rendering the add vehicle form
-
-router.post("/add-vehicle",
-    utilities.checkJWTToken,
-    utilities.checkLogin,
-    invController.verifyEmployeeOrAdmin,
-    regValidate.vehicleRules(), // Validation rules
-    validate.checkVehicleData, // Handle validation results
-    utilities.handleErrors(invController.addVehicle) // Add vehicle
-); // POST route for adding a vehicle
-
-router.get('/',
-    utilities.checkJWTToken,
-    utilities.checkLogin,
-    invController.verifyEmployeeOrAdmin,
-    utilities.handleErrors(invController.managementView)
-); // Route to render inventory management view
-
-router.get('/add-classification',
-    utilities.checkJWTToken,
-    utilities.checkLogin,
-    invController.verifyEmployeeOrAdmin,
-    async (req, res) => {
-        try {
-            const nav = await utilities.getNav(req, res);
-            res.render('inventory/add-classification', {
-                nav,
-                title: 'Add Classification',
-            });
-        } catch (error) {
-            console.error('Error fetching navigation:', error);
-            req.flash('notice', 'Failed to load navigation. Please try again.');
-            res.redirect('/');
-        }
-    }
+// Route to build inventory by classification view
+router.get(
+  '/type/:classificationId',
+  utilities.handleErrors(invController.buildByClassificationId)
 );
 
-router.get("/getInventory/:classification_id", utilities.handleErrors(invController.getInventoryJSON));
-
-router.get('/edit/:invId',
-    utilities.checkJWTToken,
-    utilities.checkLogin,
-    invController.verifyEmployeeOrAdmin,
-    utilities.handleErrors(invController.editInventoryView)
+// Route to build a specific inventory item detail view
+router.get(
+  '/detail/:inventoryId',
+  utilities.handleErrors(invController.buildByInventoryId)
 );
 
-router.post("/update/",
-    utilities.checkJWTToken,
-    utilities.checkLogin,
-    invController.verifyEmployeeOrAdmin,
-    regValidate.vehicleRules(),
-    validate.checkUpdateData,
-    utilities.handleErrors(invController.updateInventory)
+// management view
+router.get(
+  '/',
+  utilities.checkLogin,
+  utilities.checkAdministrativeLogin,
+  utilities.handleErrors(invController.buildInventoryManager)
 );
 
-router.get('/delete/:invId',
-    utilities.checkJWTToken,
-    utilities.checkLogin,
-    invController.verifyEmployeeOrAdmin,
-    utilities.handleErrors(invController.deleteConfirmationView)
+// Route to build add-classification view
+router.get(
+  '/add-classification/',
+  utilities.handleErrors(invController.buildClassificationView)
 );
 
-router.post('/delete/',
-    utilities.checkJWTToken,
-    utilities.checkLogin,
-    invController.verifyEmployeeOrAdmin,
-    utilities.handleErrors(invController.deleteInventory)
+// Route when adding a new classification
+router.post(
+  '/add-classification/',
+  classValidate.classificationRules(),
+  classValidate.checkClassData,
+  utilities.handleErrors(invController.addClassification)
 );
 
-// Export the router
+// builds the add-inventory view
+router.get(
+  '/add-inventory/',
+  utilities.handleErrors(invController.buildAddInventoryView)
+);
+// Route when adding a new car to the inventory
+router.post(
+  '/add-inventory/',
+  invenValidate.inventoryRules(),
+  invenValidate.checkInvenData,
+  utilities.handleErrors(invController.addInventory)
+);
+// this route supplies the query for cars with a certain classification
+router.get(
+  '/getInventory/:classification_id',
+  utilities.handleErrors(invController.getInventoryJSON)
+);
+
+// This route builds a view specific for a car based on the car id
+router.get(
+  '/edit/:inventory_id',
+  utilities.handleErrors(invController.buildInventoryEditView)
+);
+
+// Route that handles the update of an item in the inventory
+router.post(
+  '/update/',
+  invenValidate.inventoryRules(),
+  invenValidate.checkUpdateData,
+  utilities.handleErrors(invController.updateInventory)
+);
+
+// Route to the delete view
+router.get(
+  '/delete/:inventory_id',
+  utilities.handleErrors(invController.buildDeleteView)
+);
+
+// this routes handles the request to delete a vehicle
+router.post(
+  '/delete-vehicle/',
+  utilities.handleErrors(invController.deleteInventory)
+);
+
 module.exports = router;

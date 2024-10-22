@@ -1,0 +1,75 @@
+<% if (title) { %>
+    <h1><%= title %></h1>
+    <h2>Welcome <%= locals.accountData.account_firstname %></h2>
+    <% } else { res.redirect('/') } %> <%- messages() %> <% if (errors) { %>
+    <ul class="notice">
+      <% errors.array().forEach(error => { %>
+      <li><%= error.msg %></li>
+      <% }) %>
+    </ul>
+    <% } %>
+    <a href="/account/edit/">Edit Account Information</a><%-inventoryManagement %><% if (title) { %>
+      <h1><%= title %></h1>
+      <% } else { res.redirect('/') } %> <%- messages() %> <% if (errors) { %>
+      <ul class="notice">
+        <% errors.array().forEach(error => { %>
+        <li><%= error.msg %></li>
+        <% }) %>
+      </ul>
+      <% } %>
+      <div class="form-shape update-info">
+        <form action="/account/edit" method="POST" id="info-update-form">
+          <label
+            >First Name<input
+              type="text"
+              required
+              name="account_firstname"
+              value="<%= locals.account_firstname?locals.account_firstname:locals.accountData.account_firstname  %>"
+          /></label>
+          <label
+            >Last Name<input
+              type="text"
+              required
+              name="account_lastname"
+              value="<%= locals.account_lastname?locals.account_lastname:locals.accountData.account_lastname  %>"
+          /></label>
+          <label
+            >Email Address<input
+              type="email"
+              required
+              name="account_email"
+              value="<%= locals.account_email?locals.account_email:locals.accountData.account_email %>"
+          /></label>
+          <button type="submit">Update Information</button>
+          <input
+            type="hidden"
+            name="account_id"
+            value="
+            <%=locals.account_id?locals.account_id:locals.accountData.account_id%>"
+          />
+        </form>
+      </div>
+      
+      <div class="form-shape update-info">
+        <form action="/account/editpw" method="POST" id="password-update-form">
+          <label
+            >Entering a new password below will change your current password</label
+          >
+          <label
+            >Password<input
+              type="password"
+              required
+              minlength="12"
+              pattern="(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{12,}"
+              title="Password must contain at least one uppercase letter, one number, one special character, and be at least 12 characters long."
+              name="account_password"
+          /></label>
+          <button type="submit">Update Password</button>
+          <input
+            type="hidden"
+            name="account_id"
+            value="
+            <%=locals.account_id?locals.account_id:locals.accountData.account_id%>"
+          />
+        </form>
+      </div>

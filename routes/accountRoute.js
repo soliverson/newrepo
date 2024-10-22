@@ -1,51 +1,169 @@
-const express = require("express");
-const router = express.Router();
-const accountController = require('../controllers/accountController');
-const utilities = require('../utilities');
-const regValidate = require('../utilities/account-validation');
+const pool = require('../database/');
 
-// Route to deliver login view
-router.get("/login", utilities.handleErrors(accountController.buildLogin)); // Accessed via /account/login
-router.get('/logout', accountController.logout);
+/* ***************************
+ *  Get all classification data
+ * ************************** */
+async function getClassifications() {
+  return await pool.query(
+    'SELECT * FROM public.classification ORDER BY classification_name'
+  );
+}
 
-// Route to deliver register view
-router.get("/register", utilities.handleErrors(accountController.buildRegister)); // Accessed via /account/register
+/* ***************************
+ *  Get all inventory items and classification_name by classification_id
+ * ************************** */
+async function getInventoryByClassificationId(classification_id) {
+  try {
+    const data = await pool.query(
+      `SELECT * FROM public.inventory AS i
+      JOIN public.classification AS c
+      ON i.classification_id = c.classification_id
+      WHERE i.classification_id = $1`,
+      [classification_id]
+    );
+    return data.rows;
+  } catch (error) {
+    console.error('getclassificationsbyid error ' + error);
+  }
+}
 
-// Process the registration data
-router.post(
-    "/register",
-    regValidate.registationRules(),
-    regValidate.checkRegData,
-    utilities.handleErrors(accountController.registerAccount)
-)
+/*******************************
+ * Get the inventory item details based on the inventory id
+ *******************************/
+async function getDetailByInventoryId(inv_id) {
+  try {
+    const data = await pool.query(
+      `SELECT inv_id, inv_make, inv_model, inv_year,
+      inv_description, inv_image, inv_thumbnail, inv_price, inv_miles, inv_color, classification_id
+      FROM public.inventory
+      WHERE inv_id = $1;`,
+      [inv_id]
+    );
+    return data.rows;
+  } catch (error) {
+    console.error('getDetailByInventoryId error ' + error);
+  }
+}
 
-// Route to process the registration form with error handling
-router.post('/register', utilities.handleErrors(accountController.registerAccount));
+/***********************************************************
+ * Checks for an existing classification within the database
+ **********************************************************/
+async function checkExistingClassification(classification_name) {
+  try {
+    const sql = 'SELECT * FROM classification WHERE classification_name = $1';
+    const classification = await pool.query(sql, [classification_name]);
+    return classification.rowCount;
+  } catch (error) {
+    return error.message;
+  }
+}
 
-// Process the login route
-router.post(
-    "/login",
-    regValidate.loginRules(),          // Validate login data
-    regValidate.checkLoginData,        // Check for validation errors
-    utilities.handleErrors(accountController.accountLogin)     // Handle login logic
-);
+/******************************************
+ * Adds a new classification to the database
+ ******************************************/
+async function AddClassificationDB(classification_name) {
+  try {
+    const sql =
+      'INSERT INTO public.classification (classification_name) VALUES($1) RETURNING *';
+    return await pool.query(sql, [classification_name]);
+  } catch (error) {
+    return error.message;
+  }
+}
 
-router.get('/',
-    utilities.checkLogin,
-    accountController.accountManagementView);
+/**
+ * Adds the new car to the inventory
+ */
+async function addCarInventory(
+  inv_make,
+  inv_model,
+  inv_year,
+  inv_description,
+  inv_image,
+  inv_thumbnail,
+  inv_price,
+  inv_miles,
+  inv_color,
+  classification_id
+) {
+  try {
+    const sql =
+      'INSERT INTO public.inventory (inv_make,inv_model,inv_year,inv_description,inv_image,inv_thumbnail,inv_price,inv_miles,inv_color,classification_id) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *';
+    return await pool.query(sql, [
+      inv_make,
+      inv_model,
+      inv_year,
+      inv_description,
+      inv_image,
+      inv_thumbnail,
+      inv_price,
+      inv_miles,
+      inv_color,
+      classification_id,
+    ]);
+  } catch (error) {
+    return error.message;
+  }
+}
 
-// GET route to deliver the account update view
-router.get('/update/:account_id', 
-    utilities.handleErrors(accountController.getAccountUpdateView));
+/**
+ * Updates a specific inventory item
+ */
+async function updateInventory(
+  inv_id,
+  inv_make,
+  inv_model,
+  inv_year,
+  inv_description,
+  inv_image,
+  inv_thumbnail,
+  inv_price,
+  inv_miles,
+  inv_color,
+  classification_id
+) {
+  try {
+    const sql =
+      'UPDATE public.inventory SET inv_make =$1,inv_model =$2,inv_year =$3,inv_description =$4,inv_image =$5,inv_thumbnail =$6,inv_price =$7,inv_miles =$8,inv_color =$9,classification_id =$10 WHERE inv_id =$11 RETURNING *';
+    const data = await pool.query(sql, [
+      inv_make,
+      inv_model,
+      inv_year,
+      inv_description,
+      inv_image,
+      inv_thumbnail,
+      inv_price,
+      inv_miles,
+      inv_color,
+      classification_id,
+      inv_id,
+    ]);
+    return data.rows[0];
+  } catch (error) {
+    return error.message;
+  }
+}
 
-// POST route to process account updates
-router.post('/update/:account_id', 
-    regValidate.validateUpdate, 
-    utilities.handleErrors(accountController.processAccountUpdate));
+/**
+ * This function will delete a record from the inventory id
+ */
+async function deleteFromInventory(inv_id) {
+  try {
+    const sql = 'DELETE FROM public.inventory WHERE inv_id =$1';
+    const data = await pool.query(sql, [inv_id]);
+    return data;
+  } catch (error) {
+    return error.message;
+  }
+}
 
-// POST route to process password updates
-router.post('/update-password', 
-    regValidate.validatePassword, 
-    utilities.handleErrors(accountController.processPasswordUpdate));
-    
-module.exports = router;
+module.exports = {
+  getClassifications,
+  getInventoryByClassificationId,
+  getDetailByInventoryId,
+  checkExistingClassification,
+  AddClassificationDB,
+  addCarInventory,
+  updateInventory,
+  deleteFromInventory,
+};

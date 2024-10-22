@@ -1,43 +1,40 @@
 /* ******************************************
- * This server.js file is the primary file of the 
+ * This server.js file is the primary file of the
  * application. It is used to control the project.
  *******************************************/
-
 /* ***********************
  * Require Statements
  *************************/
-const express = require("express");
-const expressLayouts = require("express-ejs-layouts");
-const env = require("dotenv").config();
+const utilities = require('./utilities');
+const express = require('express');
+const expressLayouts = require('express-ejs-layouts');
+const env = require('dotenv').config();
 const app = express();
-const static = require("./routes/static");
-const baseController = require("./controllers/baseController");
-const inventoryRoute = require("./routes/inventoryRoute");
-const utilities = require("./utilities");
-const session = require("express-session");
+const static = require('./routes/static');
+const baseController = require('./controllers/baseController');
+const inventoryRoute = require('./routes/inventoryRoute');
+const intentionalErrorRoute = require('./routes/intentionalErrorRoute');
+const session = require('express-session');
 const pool = require('./database/');
-const accountRoutes = require("./routes/accountRoute");
-const bodyParser = require("body-parser");
-const classificationRoute = require("./routes/classificationRoute");
-const cookieParser = require("cookie-parser");
-
-/* ***********************
- * View Engine and Templates
- *************************/
+const accountRoute = require('./routes/accountRoute');
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 
 /* ***********************
  * Middleware
- *************************/
-app.use(session({
-  store: new (require('connect-pg-simple')(session))({
-    createTableIfMissing: true,
-    pool,
-  }),
-  secret: process.env.SESSION_SECRET,
-  resave: true,
-  saveUninitialized: true,
-  name: 'sessionId',
-}));
+ * ************************/
+app.use(
+  session({
+    store: new (require('connect-pg-simple')(session))({
+      createTableIfMissing: true,
+      pool,
+    }),
+    secret: process.env.SESSION_SECRET,
+    resave: true,
+    saveUninitialized: true,
+    name: 'sessionId',
+  })
+);
 
 // Express Messages Middleware
 app.use(require('connect-flash')());
@@ -46,58 +43,64 @@ app.use(function (req, res, next) {
   next();
 });
 
+// adding body parser to the entire application
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
-app.set("view engine", "ejs");
-app.use(expressLayouts);
-app.set("layout", "./layouts/layout"); // Set the layout file
-
+// adding the cookie parser
 app.use(cookieParser());
 
+// Check the tokens
 app.use(utilities.checkJWTToken);
 
-// Serve static files from the "public" directory
-app.use(express.static('public'));
+/* ***********************
+ * View Engine and Templates
+ *************************/
+app.set('view engine', 'ejs');
+app.use(expressLayouts);
+app.set('layout', './layouts/layout'); // not at views root
 
 /* ***********************
  * Routes
  *************************/
 app.use(static);
 
-// Index Route
-app.get("/", utilities.handleErrors(baseController.buildHome));
-
+// Index route
+app.get('/', utilities.handleErrors(baseController.buildHome));
 // Inventory routes
-app.use("/inv", inventoryRoute);
-
-// Account routes
-app.use("/account", accountRoutes);
-
-// Classification routes
-app.use("/classification", classificationRoute);
+app.use('/inv', utilities.handleErrors(inventoryRoute));
+// Intentional error
+app.use('/interror', utilities.handleErrors(intentionalErrorRoute));
+// Account route
+app.use('/account', utilities.handleErrors(accountRoute));
 
 // File Not Found Route - must be last route in list
 app.use(async (req, res, next) => {
-  next({ status: 404, message: 'Sorry, we appear to have lost that page.' });
+  next({
+    status: 404,
+    message:
+      'Sorry, this page didn’t pass inspection. But we’ve got plenty of certified pages that are good to go!',
+  });
 });
 
 /* ***********************
-* Express Error Handler
-* Place after all other middleware
-*************************/
+ * Express Error Handler
+ * Place after all other middleware
+ *************************/
 app.use(async (err, req, res, next) => {
   let nav = await utilities.getNav();
+  let welcomeAccount = await utilities.checkLoginWelcomeAccount(res);
   console.error(`Error at: "${req.originalUrl}": ${err.message}`);
-  if (err.status == 404) { 
-    message = err.message; 
-  } else { 
-    message = 'Oh no! There was a crash. Maybe try a different route?'; 
+  if (err.status == 404) {
+    message = err.message;
+  } else {
+    message = 'Oh no! There was a crash. Maybe try a different route?';
   }
-  res.render("errors/error", {
+  res.render('errors/error', {
     title: err.status || 'Server Error',
     message,
-    nav
+    welcomeAccount,
+    nav,
   });
 });
 
