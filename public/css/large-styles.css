@@ -282,17 +282,3 @@ span {
   border-radius: 4px;
 }
 
-input:required:invalid,
-input:focus:invalid {
-  background-image: url(/images/site/invalid.png);
-  background-position: right top;
-  background-repeat: no-repeat;
-  background-size: 30px 30px;
-}
-
-input:required:valid {
-  background-image: url(/images/site/valid.webp);
-  background-position: right top;
-  background-repeat: no-repeat;
-  background-size: 30px 30px;
-}
