@@ -1,0 +1,10 @@
+<h1>Your Feedback</h1>
+<ul>
+    <% feedbacks.forEach(feedback => { %>
+        <li>
+            <strong>Rating:</strong> <%= feedback.rating %><br>
+            <strong>Comments:</strong> <%= feedback.comments %><br>
+            <strong>Submitted on:</strong> <%= new Date(feedback.created_at).toLocaleString() %>
+        </li>
+    <% }) %>
+</ul>

@@ -1,0 +1,26 @@
+<%- include('../partials/navigation') %>
+<h1><%= title %></h1>
+
+<% if (errors) { %>
+    <ul class="error-list">
+        <% errors.array().forEach(error => { %>
+            <li><%= error.msg %></li>
+        <% }) %>
+    </ul>
+<% } %>
+
+<form action="/feedback/submit" method="POST">
+    <label for="feedback_name">Your Name:</label>
+    <input type="text" id="feedback_name" name="feedback_name" required>
+
+    <label for="feedback_email">Your Email:</label>
+    <input type="email" id="feedback_email" name="feedback_email" required>
+
+    <label for="comments">Your Feedback:</label>
+    <textarea id="comments" name="comments" required></textarea>
+
+    <label for="rating">Rating (1-5):</label>
+    <input type="number" id="rating" name="rating" min="1" max="5" required>
+
+    <button type="submit">Submit Feedback</button>
+</form>

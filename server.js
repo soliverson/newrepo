@@ -15,11 +15,13 @@ const baseController = require("./controllers/baseController");
 const inventoryRoute = require("./routes/inventoryRoute");
 const accountRoute = require('./routes/accountRoute');
 const messageRoute = require("./routes/messageRoute");
+const feedbackRoute = require('./routes/feedbackRoute');
 const utilities = require("./utilities/");
 const session = require('express-session');
 const pool = require('./database/');
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
+
 
 /* ***********************
  * Middleware
@@ -62,6 +64,7 @@ app.get("/", utilities.handleErrors(baseController.buildHome));
 app.use("/inv", inventoryRoute);
 app.use("/account", accountRoute);
 app.use("/message", messageRoute);
+app.use("/feedback", feedbackRoute);
 
 // File Not Found Route - must be last route in list
 app.use((req, res, next) => {
