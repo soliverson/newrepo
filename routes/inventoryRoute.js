@@ -18,10 +18,17 @@ router.get("/edit/:inv_id", utilities.handleErrors(invController.editInventoryVi
 
 router.get("/delete/:inv_id", utilities.handleErrors(invController.deleteInvView));
 
-router.get("/",
+router.get("/", 
     utilities.checkLogin, 
     utilities.checkAuthZ,
-    utilities.handleErrors(invController.buildManagement)
+    async (req, res, next) => {
+        try {
+            await invController.buildManagement(req, res, next);
+        } catch (error) {
+            console.error("Error in buildManagement:", error);
+            next(error);
+        }
+    }
 );
 
 router.get("/add-classification", utilities.handleErrors(invController.buildAddView));

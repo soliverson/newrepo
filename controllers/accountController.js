@@ -10,9 +10,9 @@ require("dotenv").config();
 async function buildLogin(req, res, next) {
     let nav = await utilities.getNav();
     res.render("account/login", {
-      title: "Login",
-      nav,
-      errors: null,
+        title: "Login",
+        nav,
+        errors: null,
     });
 }
 
@@ -22,12 +22,12 @@ async function buildLogin(req, res, next) {
 async function buildRegister(req, res, next) {
     let nav = await utilities.getNav();
     res.render("account/register", {
-      title: "Register",
-      nav,
-      account_firstname: "",
-      account_lastname: "",
-      account_email: "",
-      errors: null,
+        title: "Register",
+        nav,
+        account_firstname: "",
+        account_lastname: "",
+        account_email: "",
+        errors: null,
     });
 }
 
@@ -41,7 +41,7 @@ async function registerAccount(req, res) {
     // Hash the password before storing
     let hashedPassword;
     try {
-        hashedPassword = await bcrypt.hashSync(account_password, 10);
+        hashedPassword = await bcrypt.hash(account_password, 10); 
     } catch (error) {
         req.flash("notice", 'Sorry, there was an error processing the registration.');
         return res.status(500).render("account/register", {
@@ -62,10 +62,7 @@ async function registerAccount(req, res) {
     );
     
     if (regResult) {
-        req.flash(
-            "notice-success",
-            `Congratulations, you're registered ${account_firstname}. Please log in.`
-        );
+        req.flash("notice-success", `Congratulations, you're registered ${account_firstname}. Please log in.`);
         res.status(201).render("account/login", {
             title: "Login",
             nav,
@@ -102,16 +99,13 @@ async function accountLogin(req, res) {
         });
         return;
     }
+    
     try {
         if (await bcrypt.compare(account_password, accountData.account_password)) {
             delete accountData.account_password;
             const accessToken = jwt.sign(accountData, process.env.ACCESS_TOKEN_SECRET, { expiresIn: 3600 });
             
-            if(process.env.NODE_ENV === 'development') {
-                res.cookie("jwt", accessToken, { httpOnly: true, maxAge: 3600 * 1000 });
-            } else {
-                res.cookie("jwt", accessToken, { httpOnly: true, secure: true, maxAge: 3600 * 1000 });
-            }
+            res.cookie("jwt", accessToken, { httpOnly: true, secure: process.env.NODE_ENV !== 'development', maxAge: 3600 * 1000 });
             req.flash("notice-success", "You have logged in.");
             res.locals.account_firstname = accountData.account_firstname;
             res.redirect("/account/");
@@ -125,6 +119,7 @@ async function accountLogin(req, res) {
             });
         }
     } catch (error) {
+        console.error("Error during login:", error);
         throw new Error('Access Forbidden');
     }
 }
@@ -135,16 +130,28 @@ async function accountLogin(req, res) {
 async function buildManagement(req, res, next) {
     let nav = await utilities.getNav();
     let link = await utilities.buildAccountLink(res.locals.accountData);
-    let unreadMsgNum = await utilities.getUnreadMsgNum(res.locals.accountData.account_id);
+    
+    if (!res.locals.accountData) {
+        req.flash("notice", "Account data not found.");
+        return res.redirect("/account/login");
+    }
 
-    res.render("account/management", {
-        nav,
-        title: "Account Management",
-        errors: null,
-        account_firstname: res.locals.accountData.account_firstname,
-        link,
-        unreadMsgNum,
-    });
+    try {
+        let unreadMsgNum = await utilities.getUnreadMsgNum(res.locals.accountData.account_id);
+        res.render("account/management", {
+            nav,
+            title: "Account Management",
+            errors: null,
+            account_firstname: res.locals.accountData.account_firstname,
+            link,
+            unreadMsgNum,
+            accountData: res.locals.accountData // Pass account data for EJS access
+        });
+    } catch (error) {
+        console.error("Error retrieving messages:", error);
+        req.flash("notice", "Failed to retrieve messages.");
+        return res.redirect("/account");
+    }
 }
 
 /* ****************************************
@@ -152,6 +159,7 @@ async function buildManagement(req, res, next) {
  * ************************************ */
 async function accountLogout(req, res) {
     res.clearCookie("jwt");
+    req.flash("notice-success", "You have successfully logged out.");
     res.redirect("/");
 }
 
@@ -160,16 +168,28 @@ async function accountLogout(req, res) {
  * ************************************ */
 async function buildUpdateView(req, res, next) {
     let nav = await utilities.getNav();
-    
-    res.render("account/edit-account", {
-        nav,
-        title: "Edit Account",
-        account_firstname: res.locals.accountData.account_firstname,
-        account_lastname: res.locals.accountData.account_lastname,
-        account_email: res.locals.accountData.account_email,
-        account_id: res.locals.accountData.account_id,
-        errors: null,
-    });
+    const accountId = req.params.account_id; // Ensure account ID is retrieved from route params
+
+    try {
+        const accountData = await accountModel.getAccountById(accountId); // Fetch the account details
+        if (!accountData) {
+            req.flash("notice", "Account not found.");
+            return res.redirect("/account");
+        }
+
+        res.render("account/edit-account", {
+            nav,
+            title: "Edit Account",
+            account_firstname: accountData.account_firstname,
+            account_lastname: accountData.account_lastname,
+            account_email: accountData.account_email,
+            account_id: accountData.account_id,
+            errors: null,
+        });
+    } catch (error) {
+        console.error("Error in buildUpdateView:", error);
+        next(error);
+    }
 }
 
 module.exports = {

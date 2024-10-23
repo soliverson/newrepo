@@ -30,8 +30,8 @@ app.use(session({
     pool,
   }),
   secret: process.env.SESSION_SECRET,
-  resave: false, // Set to false for better session management
-  saveUninitialized: false, // Set to false to avoid storing unnecessary sessions
+  resave: false,
+  saveUninitialized: false,
   name: 'sessionId',
 }));
 
@@ -43,7 +43,7 @@ app.use(function (req, res, next) {
 });
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: true })); 
 app.use(cookieParser());
 app.use(utilities.checkJWTToken);
 
@@ -58,7 +58,6 @@ app.set("layout", "./layouts/layout");
  * Routes
  *************************/
 app.use(staticRoutes);
-// Index route
 app.get("/", utilities.handleErrors(baseController.buildHome));
 app.use("/inv", inventoryRoute);
 app.use("/account", accountRoute);
@@ -71,7 +70,6 @@ app.use((req, res, next) => {
 
 /* ***********************
  * Express Error Handler
- * Place after all other middleware
  *************************/
 app.use(async (err, req, res, next) => {
   let nav = await utilities.getNav();
@@ -86,14 +84,10 @@ app.use(async (err, req, res, next) => {
 
 /* ***********************
  * Local Server Information
- * Values from .env (environment) file
  *************************/
-const port = process.env.PORT || 5500; // Add default port if PORT is missing
+const port = process.env.PORT || 5500; 
 const host = process.env.HOST || 'localhost';
 
-/* ***********************
- * Log statement to confirm server operation
- *************************/
 app.listen(port, () => {
   console.log(`app listening on ${host}:${port}`);
 });

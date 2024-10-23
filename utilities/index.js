@@ -10,23 +10,34 @@ require("dotenv").config();
  * Constructs the nav HTML unordered list
  ************************** */
 Util.getNav = async function (req, res, next) {
-  let data = await invModel.getClassifications();
-  let list = "<ul>";
-  list += '<li><a href="/" title="Home page">Home</a></li>';
-  data.rows.forEach((row) => {
-    list += "<li>";
-    list +=
-      '<a href="/inv/type/' +
-      row.classification_id +
-      '" title="See our inventory of ' +
-      row.classification_name +
-      ' vehicles">' +
-      row.classification_name +
-      "</a>";
-    list += "</li>";
-  });
-  list += "</ul>";
-  return list;
+  try {
+    const data = await invModel.getClassifications(); // Fetch classifications
+    let list = "<ul>";
+    list += '<li><a href="/" title="Home page">Home</a></li>';
+
+    if (data.rows) { // Ensure data.rows is defined
+      data.rows.forEach((row) => {
+        list += "<li>";
+        list +=
+          '<a href="/inv/type/' +
+          row.classification_id +
+          '" title="See our inventory of ' +
+          row.classification_name +
+          ' vehicles">' +
+          row.classification_name +
+          "</a>";
+        list += "</li>";
+      });
+    } else {
+      list += "<li>No classifications found.</li>"; // Handle no classifications
+    }
+
+    list += "</ul>";
+    return list; // Return the list
+  } catch (error) {
+    console.error("Error fetching navigation data:", error); // Log the error
+    return "<ul><li>Error loading navigation.</li></ul>"; // Fallback list
+  }
 };
 
 /* **************************************
@@ -168,7 +179,7 @@ Util.checkLogin = (req, res, next) => {
  *  Check if user is Admin or Employee
  * ************************************ */
 Util.checkAuthZ = (req, res, next) => {
-  const userType = res.locals.accountData.account_type;
+  const userType = res.locals.accountData?.account_type; // Use optional chaining to avoid errors
   if (userType === "Admin" || userType === "Employee") {
     next();
   } else {
@@ -182,7 +193,7 @@ Util.checkAuthZ = (req, res, next) => {
  ************************** */
 Util.recipientListSelect = async function (message_from, message_to) {
   let data = await accountModel.getALLAccounts(message_from);
-  let recipientList = `
+  let recipientList = ` 
     <select name="message_to" id="message_to" required>
       <option value="">Select a recipient</option>
       ${data

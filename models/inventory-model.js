@@ -1,10 +1,16 @@
-const pool = require("../database/");
+const pool = require("../database");
 
 /* ***************************
  *  Get all classification data
  * ************************** */
 async function getClassifications() {
-    return await pool.query("SELECT * FROM public.classification ORDER BY classification_name");
+  try {
+      const result = await pool.query("SELECT * FROM public.classification ORDER BY classification_name");
+      return result; // Ensure you return the result directly
+  } catch (error) {
+      console.error("Error fetching classifications:", error);
+      throw error; // Rethrow the error for handling in utilities
+  }
 }
 
 /* ***************************
@@ -19,10 +25,10 @@ async function getInventoryByClassificationId(classification_id) {
              WHERE i.classification_id = $1`,
             [classification_id]
         );
-        return data.rows;
+        return data.rows; // Return inventory data
     } catch (error) {
-        console.error("getInventoryByClassificationId error: " + error);
-        throw error; // Consider throwing the error to be handled at a higher level
+        console.error("Error fetching inventory by classification ID:", error);
+        throw error; // Throw the error to be handled at a higher level
     }
 }
 
@@ -33,10 +39,10 @@ async function getInventoryByInvId(inv_id) {
              WHERE i.inv_id = $1`,
             [inv_id]
         );
-        return data.rows;
+        return data.rows; // Return inventory data
     } catch (error) {
-        console.error("getInventoryByInvId error: " + error);
-        throw error; // Consider throwing the error to be handled at a higher level
+        console.error("Error fetching inventory by ID:", error);
+        throw error; // Throw the error to be handled at a higher level
     }
 }
 
@@ -45,8 +51,8 @@ async function addClassification(classification_name) {
         const sql = "INSERT INTO public.classification (classification_name) VALUES ($1)";
         await pool.query(sql, [classification_name]);
     } catch (error) {
-        console.error("Failed to add classification name: ", error);
-        throw error; // Consider throwing the error to be handled at a higher level
+        console.error("Failed to add classification name:", error);
+        throw error; // Throw the error to be handled at a higher level
     }
 }
 
@@ -56,8 +62,8 @@ async function checkExistingName(classification_name) {
         const name = await pool.query(sql, [classification_name]);
         return name.rowCount > 0; // Return boolean to indicate if it exists
     } catch (error) {
-        console.error(error.message);
-        return false; // Return false if there's an error
+        console.error("Error checking existing classification name:", error);
+        throw error; // Throw the error to be handled at a higher level
     }
 }
 
@@ -92,10 +98,10 @@ async function addInventory(
             classification_id
         ]);
         
-        return result.rowCount; // Return the number of rows affected
+        return result.rowCount; // Return number of rows affected
     } catch (error) {
-        console.error("Adding vehicle data failed: " + error);
-        throw error; // Consider throwing the error to be handled at a higher level
+        console.error("Adding vehicle data failed:", error);
+        throw error; // Throw the error to be handled at a higher level
     }
 }
 
@@ -136,8 +142,8 @@ async function updateInventory(
         
         return data.rows[0]; // Return the updated row
     } catch (error) {
-        console.error("Updating inventory failed: " + error);
-        throw error; // Consider throwing the error to be handled at a higher level
+        console.error("Updating inventory failed:", error);
+        throw error; // Throw the error to be handled at a higher level
     }
 }
 
@@ -145,10 +151,10 @@ async function deleteInventory(inv_id) {
     try {
         const sql = "DELETE FROM public.inventory WHERE inv_id = $1";
         const data = await pool.query(sql, [inv_id]);
-        return data.rowCount; // Return the number of rows affected
+        return data.rowCount; // Return number of rows affected
     } catch (error) {
-        console.error("Deleting inventory failed: " + error);
-        throw error; // Consider throwing the error to be handled at a higher level
+        console.error("Deleting inventory failed:", error);
+        throw error; // Throw the error to be handled at a higher level
     }
 }
 

@@ -15,7 +15,7 @@ router.get('/register', utilities.handleErrors(accountController.buildRegister))
 
 // Account management view
 router.get('/', 
-  utilities.checkLogin,  // Added middleware to check if the user is logged in
+  utilities.checkLogin,  // Middleware to check if the user is logged in
   utilities.handleErrors(accountController.buildManagement)
 );
 

@@ -1,3 +1,4 @@
+<!-- views/inventory/edit-inventory.ejs -->
 <div id="updateForm" class="form-container">
     <h1><%= title %></h1>
 
@@ -18,47 +19,45 @@
         </div>
         <div>
             <label for="inv_make" class="required">Make</label><br>
-            <input type="text" id="inv_make" name="inv_make" minlength="3" placeholder="Min of 3 characters" required value="<%= locals.inv_make %>">
+            <input type="text" id="inv_make" name="inv_make" minlength="3" placeholder="Min of 3 characters" required value="<%= inv_make %>">
         </div>
         <div>
             <label for="inv_model" class="required">Model</label><br>
-            <input type="text" id="inv_model" name="inv_model" minlength="3" placeholder="Min of 3 characters" required value="<%= locals.inv_model %>">
+            <input type="text" id="inv_model" name="inv_model" minlength="3" placeholder="Min of 3 characters" required value="<%= inv_model %>">
         </div>
         <div>
             <label for="inv_description" class="required">Description</label><br>
-            <textarea id="inv_description" name="inv_description" rows="3" required><%= locals.inv_description %></textarea>
+            <textarea id="inv_description" name="inv_description" rows="3" required><%= inv_description %></textarea>
         </div>
         <div>
             <label for="inv_image" class="required">Image Path</label><br>
-            <input type="text" id="inv_image" name="inv_image" value="<%= locals.inv_image %>" required>
+            <input type="text" id="inv_image" name="inv_image" value="<%= inv_image %>" required>
         </div>
         <div>
             <label for="inv_thumbnail" class="required">Thumbnail Path</label>
-            <input type="text" id="inv_thumbnail" name="inv_thumbnail" value="<%= locals.inv_thumbnail %>" required>
+            <input type="text" id="inv_thumbnail" name="inv_thumbnail" value="<%= inv_thumbnail %>" required>
         </div>
         <div>
             <label for="inv_price" class="required">Price</label><br>
-            <input type="number" id="inv_price" name="inv_price" min="0" placeholder="decimal or integer" required value="<%= locals.inv_price %>">
+            <input type="number" id="inv_price" name="inv_price" min="0" required value="<%= inv_price %>">
         </div>
         <div>
             <label for="inv_year" class="required">Year</label><br>
-            <input type="number" id="inv_year" name="inv_year" placeholder="4-digit year" min="1000" max="<%= new Date().getFullYear() %>" required value="<%= locals.inv_year %>">
+            <input type="number" id="inv_year" name="inv_year" min="1000" max="<%= new Date().getFullYear() %>" required value="<%= inv_year %>">
         </div>
         <div>
             <label for="inv_miles" class="required">Miles</label><br>
-            <input type="number" id="inv_miles" name="inv_miles" min="0" placeholder="digits only" required value="<%= locals.inv_miles %>">
+            <input type="number" id="inv_miles" name="inv_miles" min="0" required value="<%= inv_miles %>">
         </div>
         <div>
             <label for="inv_color" class="required">Color</label>
-            <input type="text" id="inv_color" name="inv_color" pattern="[A-Za-z\s]+" required value="<%= locals.inv_color %>">
+            <input type="text" id="inv_color" name="inv_color" required value="<%= inv_color %>">
         </div>
         <div class="submit">
             <input type="submit" name="submit" value="Update Vehicle">
         </div>
-        <div>
-            <input type="hidden" name="inv_id" value="<%= locals.inv_id %>">
-        </div>
+        <input type="hidden" name="inv_id" value="<%= inv_id %>">
     </form>
 </div>
 
-<script src="../../js/inv-update.js"></script>
+<script src="inv-update.js"></script>
