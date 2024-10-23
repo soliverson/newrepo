@@ -1,0 +1,10 @@
+-- Change the account_type of the Employee account to "Employee"
+UPDATE account
+SET account_type = 'Employee'
+WHERE account_email = 'happy@340.edu';  -- Make sure the email matches the Employee account
+
+-- Change the account_type of the Manager account to "Admin"
+UPDATE account
+SET account_type = 'Admin'
+WHERE account_email = 'manager@340.edu';  -- Make sure the email matches the Manager account
+

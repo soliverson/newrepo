@@ -1,0 +1,21 @@
+<!-- views/account/updateAccount.ejs -->
+
+<form action="/account/update" method="POST">
+    <div>
+      <label for="firstName">First Name:</label>
+      <input type="text" id="firstName" name="firstName" value="<%= firstName %>" required>
+    </div>
+    <div>
+      <label for="lastName">Last Name:</label>
+      <input type="text" id="lastName" name="lastName" value="<%= lastName %>" required>
+    </div>
+    <div>
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" value="<%= email %>" required>
+    </div>
+    <input type="hidden" name="accountId" value="<%= accountId %>">
+    <div>
+      <input type="submit" value="Update Account">
+    </div>
+  </form>
+  

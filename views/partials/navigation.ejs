@@ -1,3 +1,13 @@
 <nav>
+    <div id="nav-btn" >
+        <i class="fa-solid fa-bars fa-2xl" onclick="toggleMenu()"></i>
+    </div>
     <%- nav %>
 </nav>
+
+<script>
+    function toggleMenu() {
+        const menu = document.querySelector("nav ul")
+        menu.classList.toggle("open-menu")
+    }
+</script>

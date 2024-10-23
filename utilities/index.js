@@ -1,71 +1,20 @@
-// requirements
-const invModel = require('../models/inventory-model');
+const invModel = require("../models/inventory-model");
+const accountModel = require("../models/account-model");
+const msgModel = require("../models/message-model");
 const Util = {};
-const jwt = require('jsonwebtoken');
-require('dotenv').config();
-
-/* **************************************
- * Build the classification view HTML
- * ************************************ */
-Util.buildClassificationGrid = async function (data) {
-  let grid;
-  if (data.length > 0) {
-    grid = '<ul id="inv-display">';
-    data.forEach((vehicle) => {
-      grid += '<li>';
-      grid +=
-        '<a href="../../inv/detail/' +
-        vehicle.inv_id +
-        '" title="View ' +
-        vehicle.inv_make +
-        ' ' +
-        vehicle.inv_model +
-        'details"><img src="' +
-        vehicle.inv_thumbnail +
-        '" alt="Image of ' +
-        vehicle.inv_make +
-        ' ' +
-        vehicle.inv_model +
-        ' on CSE Motors" /></a>';
-      grid += '<div class="namePrice">';
-      grid += '<hr />';
-      grid += '<h2>';
-      grid +=
-        '<a href="../../inv/detail/' +
-        vehicle.inv_id +
-        '" title="View ' +
-        vehicle.inv_make +
-        ' ' +
-        vehicle.inv_model +
-        ' details">' +
-        vehicle.inv_make +
-        ' ' +
-        vehicle.inv_model +
-        '</a>';
-      grid += '</h2>';
-      grid +=
-        '<span>$' +
-        new Intl.NumberFormat('en-US').format(vehicle.inv_price) +
-        '</span>';
-      grid += '</div>';
-      grid += '</li>';
-    });
-    grid += '</ul>';
-  } else {
-    grid += '<p class="notice">Sorry, no matching vehicles could be found.</p>';
-  }
-  return grid;
-};
+const jwt = require("jsonwebtoken");
+const dayjs = require("dayjs");
+require("dotenv").config();
 
 /* ************************
  * Constructs the nav HTML unordered list
  ************************** */
 Util.getNav = async function (req, res, next) {
   let data = await invModel.getClassifications();
-  let list = '<ul>';
+  let list = "<ul>";
   list += '<li><a href="/" title="Home page">Home</a></li>';
   data.rows.forEach((row) => {
-    list += '<li>';
+    list += "<li>";
     list +=
       '<a href="/inv/type/' +
       row.classification_id +
@@ -73,180 +22,261 @@ Util.getNav = async function (req, res, next) {
       row.classification_name +
       ' vehicles">' +
       row.classification_name +
-      '</a>';
-    list += '</li>';
+      "</a>";
+    list += "</li>";
   });
-  list += '</ul>';
+  list += "</ul>";
   return list;
 };
 
-Util.getClassificationOptions = async function (classification_id = null) {
-  let data = await invModel.getClassifications();
-  let list =
-    '<select name="classification_id" id="classification_id" required>';
-  list += "<option value=''>Choose a Classification</option>";
-  data.rows.forEach((row) => {
-    list += '<option value="' + row.classification_id + '"';
-    if (
-      classification_id != null &&
-      row.classification_id == classification_id
-    ) {
-      list += ' selected ';
-    }
-    list += '>' + row.classification_name + '</option>';
-  });
-  list += '</select>';
-  return list;
-};
-
-/**
- *Constructs the template grid for the details of the car
- */
-Util.buildItemDetailGrid = async function (data) {
-  let grid = '';
+/* **************************************
+ * Build the classification view HTML
+ ************************************ */
+Util.buildClassificationGrid = async function (data) {
+  let grid = "";
   if (data.length > 0) {
-    grid += `<h3 class="detail-price">$${new Intl.NumberFormat('en-US').format(
-      Number(data[0].inv_price)
-    )}</h3>
-            <div class="details">
-              <img class="car-image" src="${data[0].inv_image}" alt="image of ${
-      data[0].inv_make
-    } ${data.inv_model} on CSE Motors" />
-              <div class="car-info">
-                <p>Make: ${data[0].inv_make}</p>
-                <p>Model: ${data[0].inv_model}</p>
-                <p>Year: ${data[0].inv_year}</p>
-                <p>Miles: ${new Intl.NumberFormat('en-US').format(
-                  data[0].inv_miles
-                )}</p>
-                <p>Color: ${data[0].inv_color}</p>
-                <p class="description">${data[0].inv_description}</p>
-              </div>
-            </div>`;
+    grid = '<ul id="inv-display">';
+    data.forEach((vehicle) => {
+      grid += "<li>";
+      grid +=
+        '<a href="/inv/detail/' +
+        vehicle.inv_id +
+        '" title="View ' +
+        vehicle.inv_make +
+        " " +
+        vehicle.inv_model +
+        ' details"><img src="' +
+        vehicle.inv_thumbnail +
+        '" alt="Image of ' +
+        vehicle.inv_make +
+        " " +
+        vehicle.inv_model +
+        ' on CSE Motors"></a>';
+      grid += '<div class="namePrice">';
+      grid += "<hr>";
+      grid += "<h2>";
+      grid +=
+        '<a href="../../inv/detail/' +
+        vehicle.inv_id +
+        '" title="View ' +
+        vehicle.inv_make +
+        " " +
+        vehicle.inv_model +
+        ' details">' +
+        vehicle.inv_make +
+        " " +
+        vehicle.inv_model +
+        "</a>";
+      grid += "</h2>";
+      grid += "<span>$" + new Intl.NumberFormat("en-US").format(vehicle.inv_price) + "</span>";
+      grid += "</div>";
+      grid += "</li>";
+    });
+    grid += "</ul>";
   } else {
-    grid += '<p class="notice">Sorry, no matching vehicles could be found.</p>';
+    grid = '<p class="notice">Sorry, no matching vehicles could be found.</p>';
   }
   return grid;
 };
 
-/* ****************************************
- * Middleware For Handling Errors
- * Wrap other function in this for
- * General Error Handling
- **************************************** */
-Util.handleErrors = (fn) => (req, res, next) =>
-  Promise.resolve(fn(req, res, next)).catch(next);
+/* **************************************
+ * Build the inventory details HTML
+ ************************************ */
+Util.buildInventoryDetails = async function (data) {
+  let content = "";
+  if (data) {
+    const usPrice = new Intl.NumberFormat("en-US").format(data.inv_price);
+    const usMiles = new Intl.NumberFormat("en-US").format(data.inv_miles);
+    content = `
+      <div class="inventory-detail-card">
+        <div class="image-box">
+          <img src='${data.inv_image}' alt='photo of ${data.inv_year} ${data.inv_make} ${data.inv_model}'>
+        </div>
+        <div class="detail-box">
+          <h3>${data.inv_make} ${data.inv_model} Details</h3>
+          <div class="price"><strong>Price: </strong>$${usPrice}</div>
+          <div class="description"><strong>Description: </strong>${data.inv_description}</div>
+          <div class="color"><strong>Color: </strong>${data.inv_color}</div>
+          <div class="miles"><strong>Miles: </strong>${usMiles}</div>
+        </div>
+      </div>
+    `;
+  } else {
+    content = "<p>Oops...the details of the vehicle are not available right now. Please try again later.</p>";
+  }
+  return content;
+};
+
+/* **************************************
+ * Build the classification list HTML
+ ************************************ */
+Util.buildClassificationList = async function (classification_id = null) {
+  let data = await invModel.getClassifications();
+  let classificationList = '<select name="classification_id" id="classificationList" required>';
+  classificationList += "<option value=''>Choose a Classification</option>";
+  data.rows.forEach((row) => {
+    classificationList += '<option value="' + row.classification_id + '"';
+    if (classification_id != null && row.classification_id == classification_id) {
+      classificationList += " selected ";
+    }
+    classificationList += ">" + row.classification_name + "</option>";
+  });
+  classificationList += "</select>";
+  return classificationList;
+};
 
 /* ****************************************
- * Middleware to check token validity
+ * Middleware For Handling Errors
+ * Wrap other functions in this for 
+ * General Error Handling
  **************************************** */
+Util.handleErrors = (fn) => (req, res, next) => Promise.resolve(fn(req, res, next)).catch(next);
+
+/* ***************************************
+ * Middleware to check token validity
+ *************************************** */
 Util.checkJWTToken = (req, res, next) => {
   if (req.cookies.jwt) {
-    jwt.verify(
-      req.cookies.jwt,
-      process.env.ACCESS_TOKEN_SECRET,
-      function (err, accountData) {
-        if (err) {
-          req.flash('Please log in');
-          res.clearCookie('jwt');
-          return res.redirect('/account/login');
-        }
-        res.locals.accountData = accountData;
-        res.locals.loggedin = 1;
-        next();
+    jwt.verify(req.cookies.jwt, process.env.ACCESS_TOKEN_SECRET, function (err, accountData) {
+      if (err) {
+        req.flash("Please log in");
+        res.clearCookie("jwt");
+        return res.redirect("/account/login");
       }
-    );
+      res.locals.accountData = accountData;
+      res.locals.loggedin = 1;
+      next();
+    });
   } else {
     next();
   }
 };
 
-/* **********************************************************
- *  Check Login - prevents the render of unauthorized content
- * ******************************************************* */
+/* ****************************************
+ *  Check if user is logged in
+ * ************************************ */
 Util.checkLogin = (req, res, next) => {
   if (res.locals.loggedin) {
     next();
   } else {
-    req.flash('notice', 'Please log in.');
-    return res.redirect('/account/login');
+    req.flash("notice", "Please log in.");
+    return res.redirect("/account/login");
   }
 };
 
-/************************************************
- * Checks login to decide what to load for header
- ***********************************************/
-Util.checkLoginWelcomeAccount = async (res) => {
-  if (res.locals.loggedin) {
-    return Util.getLogOut(res.locals);
-  } else {
-    return Util.getMyAccount();
-  }
-};
-
-/**
- * This function will return the log out and welcome
- */
-Util.getLogOut = (locals) => {
-  let logOut = `<p>Welcome <a href="/account/">${locals.accountData.account_firstname}</a> | <a href="/account/logout">Logout</a></p>`;
-  return logOut;
-};
-
-/**
- * This function will return the my account regular view
- */
-Util.getMyAccount = () => {
-  let myAccount =
-    '<a title="Click to log in" href="/account/login">My Account</a>';
-  return myAccount;
-};
-
-/*************************************************************************************
- * This function prevents the different accounts from entering into managerial content
- *************************************************************************************/
-Util.checkAdministrativeLogin = (req, res, next) => {
-  if (
-    res.locals.accountData.account_type == 'Employee' ||
-    res.locals.accountData.account_type == 'Admin'
-  ) {
+/* ****************************************
+ *  Check if user is Admin or Employee
+ * ************************************ */
+Util.checkAuthZ = (req, res, next) => {
+  const userType = res.locals.accountData.account_type;
+  if (userType === "Admin" || userType === "Employee") {
     next();
   } else {
-    req.flash('notice', 'You do not possess administrative access!');
-    return res.redirect('/');
+    req.flash("notice", "You don't have permission to access this page.");
+    return res.redirect("/account/login");
   }
 };
 
-/**
- * This function returns a link to edit the client's account
- */
-Util.buildEditAccountInfo = (res) => {
-  let editInfo = '<a href="/account/edit/">Edit Account Information</a>';
-  return editInfo;
+/* ************************
+ * Build recipient list
+ ************************** */
+Util.recipientListSelect = async function (message_from, message_to) {
+  let data = await accountModel.getALLAccounts(message_from);
+  let recipientList = `
+    <select name="message_to" id="message_to" required>
+      <option value="">Select a recipient</option>
+      ${data
+        .map(
+          (d) => `
+          <option value="${d.account_id}" ${message_to != null && d.account_id == message_to ? "selected" : ""}>
+            ${d.account_firstname} ${d.account_lastname}
+          </option>`
+        )
+        .join("")}
+    </select>
+  `;
+  return recipientList;
 };
 
-/**
- * This function returns a build inventory management section
- */
-Util.buildInventoryManagement = (res) => {
-  let inventoryManagement = '';
-  inventoryManagement +=
-    '<div><h3>Inventory Management</h3><a href="/inv/">Manage Inventory</a></div>';
-  return inventoryManagement;
+/* ************************
+ * Retrieve number of unread messages by account
+ ************************** */
+Util.getUnreadMsgNum = async function (message_to) {
+  const data = await msgModel.getUnreadMsgByMessage_to(message_to);
+  return data.length;
 };
 
-/**
- * this higher order function provides the way to render depending on the client
- */
-Util.renderAdmisnistrativeClient = (res, firstCallBack, secondCallback) => {
-  if (
-    res.locals.accountData.account_type == 'Employee' ||
-    res.locals.accountData.account_type == 'Admin'
-  ) {
-    let template = firstCallBack(res);
-    return template;
+/* ************************
+ * Retrieve message table by account
+ ************************** */
+Util.getMsgTable = async function (message_to) {
+  const data = await msgModel.getMessagesByMessage_to(message_to);
+  if (data && data.length > 0) {
+    let msgContent = data
+      .map((d) => {
+        let formattedDate = dayjs(d.message_created).format("DD-MM-YYYY HH:mm");
+        let mailIcon = d.message_read
+          ? `<i class="fa fa-envelope-o" aria-hidden="true"></i>` 
+          : `<i class="fa fa-envelope" aria-hidden="true"></i>`;
+        return `
+          <tr>
+            <td class="ellipsis">${formattedDate}</td>
+            <td class="ellipsis">${mailIcon}<a href="/message/read/${d.message_id}">${d.message_subject}</a></td>
+            <td>${d.sender_name}</td>
+            <td>${d.message_read}</td>
+          </tr>`;
+      })
+      .join("");
+    return msgContent;
   } else {
-    let template = secondCallback(res);
-    return template;
+    return "<p>No messages found.</p>";
   }
 };
+
+/* **************************************
+* Build the link HTML in edit-account
+* ************************************ */
+Util.buildAccountLink = async function(data) {
+  let content;
+
+  if (data) {
+    content = `
+      <div id="edit-account">
+        <a href="/account/edit-account/${data.account_id}">
+          Edit Account Information
+        </a>
+      </div>
+    `;
+  } else {
+    throw new Error("Account data is invalid.");
+  }
+
+  return content;
+};
+
+/* ************************
+ * Retrieve archived message table by account
+ ************************** */
+Util.getArchivedMsgTable = async function (message_to) {
+  const data = await msgModel.getArchivedMsgByFrom(message_to);
+  if (data && data.length > 0) {
+    const msgContent = await Promise.all(
+      data.map(async (d) => {
+        const formattedDate = dayjs(d.message_created).format("DD-MM-YYYY HH:mm");
+        const sender_name = await accountModel.getFullNameByAccountId(d.message_from);
+        return `
+          <tr>
+            <td class="ellipsis">${formattedDate}</td>
+            <td class="ellipsis"><a href="/message/read/${d.message_id}">${d.message_subject}</a></td>
+            <td>${sender_name}</td>
+            <td>${d.message_read}</td>
+          </tr>`;
+      })
+    );
+    return msgContent.join("");
+  } else {
+    return "<p>No archived messages found.</p>";
+  }
+};
+
 module.exports = Util;

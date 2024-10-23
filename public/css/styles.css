@@ -1,614 +1,588 @@
-/*******************************************************
-  *              General Body Styling
-********************************************************/
+/******* Change Box Model ***************/
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
 body {
-  background-image: url('/images/site/checkerboard.jpg');
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  background-position: center;
-  margin: 0;
+  font-size: 16px;
+  font-family: var(--font2);
+  font-weight: 400;
+  background-image: url('../images/site/checkerboard.jpg');
 }
 
-a {
-  text-decoration: none;
-  color: inherit;
+.font-1 {
+  font-family: var(--font1);
+}
+
+.font-2 {
+  font-family: var(--font2);
 }
 
 #wrapper {
   background-color: white;
-  margin: 30px auto;
-  padding: 5px;
-  max-width: 1200px;
-  border: 7px solid lightskyblue;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 15px 30px;
+  padding: 15px;
+  border:5px solid var(--colorBlue);
+  border-radius: 20px;
 }
-
-/*******************************************************
-  *
-  *              Header and Navigation Styling
-  *
-********************************************************/
-nav {
-  background-color: black;
-  color: white;
-  padding: 10px 20px;
-  position: relative;
-  top: 20px;
+/* -----header styles----- */
+#top-header {
   display: flex;
-  justify-content: space-around;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.siteName {
+  font-size: 1.5rem;
+  font-family: var(--font1);
+  font-weight: 700;
 }
 
-nav a {
-  color: white;
+#tools {
+  font-family: var(--font1);
+}
+
+#tools a:link {
   text-decoration: none;
-  font-size: 16px;
-  margin: 0 25px;
+  color: blue;
+}
+
+#tools a:visited {
+  color: blue;
+}
+
+#tools a:hover {
+  color: white;
+  background-color: black;
+}
+/* -----end of header styles------ */
+
+/* -----navigation styles------ */
+nav {
+  position: relative;
+}
+
+nav #nav-btn {
+  padding: 15px;
 }
 
 nav ul {
-  display: flex;
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  width: 100%;
-  justify-content: space-between;
-}
-
-nav li {
-  margin: 0 25px;
-}
-
-#top-header {
-  display: flex;
-  font-size: 25px;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 20px;
-  font-family: sans-serif;
-}
-
-/*******************************************************
-  *
-  *              Grid and Image Styling
-  *
-********************************************************/
-/* Grid container for vehicle listings */
-#inv-display {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 20px;
-  list-style: none; /* Remove bullets */
-  padding: 0;
-  margin: 0;
-}
-
-/* Individual grid items (vehicles) */
-#inv-display li {
+  position: absolute;
+  top: 50px;
+  left: -160px;
+  margin-top: 0;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  overflow: hidden;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: box-shadow 0.3s ease;
-  text-align: center;
-  padding: 15px; /* Add padding inside each grid item */
+  list-style-type: none;
+  width: fit-content;
+  background-color: black;
+  color: white;
+  padding: 5px;
+  font-family: var(--font1);
+  z-index: 100;
+  transition: left 1s ease
 }
 
-#inv-display li:hover {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+nav ul.open-menu {
+  left: 0;
 }
 
-/* Image styling for vehicles */
-#inv-display img {
+nav ul li {
+  padding: 15px;
+}
+
+nav ul a:link {
+  color: white;
+  text-decoration: none;
+}
+nav ul a:visited {
+  color: white
+}
+nav ul a:hover {
+  color: black;
+  background-color: white
+}
+/* -----end of navigation styles------ */
+
+/* -----body styles----- */
+.hero-container {
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
+.hero-car {
+  width: 90%;
+}
+
+.hero-description {
+  background-color: white;
+  opacity: 90%;
+  position: absolute;
+  top: 0;
+  left: 10px;
+  color: #2f5b83;
+  line-height: 40%;
+  font-size: 14px;
+}
+
+.hero-description p {
+  font-family: var(--font1);
+}
+.hero-button {
+  border-style: outset;
+  border-width: 4px;
+  max-width: 120px;
+  width: 80%;
+}
+
+.info-container .reviews-card ul li {
+  font-family: var(--font1);
+  padding: 5px;
+}
+
+.info-container .upgrades-card .upgrades-images {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  align-items: flex-end;
+}
+
+.info-container .upgrades-card .upgrades-images > div {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.info-container .upgrades-card .upgrades-images .img-box {
+  background-color: var(--colorBlue);
+  border: 2px solid black;
+  display: flex;
+  justify-content: center;
+  flex-grow: 1;
+}
+
+.info-container .upgrades-card .upgrades-images .link-box {
+  display: flex;
+  justify-content: center;
+}
+
+#inv-display {
   width: 100%;
-  height: auto;
-  margin: 0 auto;
-  padding: 10px; /* Padding between image and frame */
+  margin: auto;
+  padding-left: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  list-style: none;
+  /* border: 1px solid red; */
 }
 
-/* Vehicle name and price styling */
-.namePrice {
+#inv-display li {
+  width: 300px;
+  margin: 10px;
   padding: 10px;
+  background-color: #f4f1f1;
+}
+
+#inv-display li > a {
+  display: block;
   text-align: center;
 }
 
-.namePrice h2 {
-  font-size: 1.2em;
-  margin: 10px 0;
+#inv-display li > div {
+  text-align: center;
 }
 
 .namePrice span {
-  font-size: 1.1em;
-  font-weight: bold;
-  color: black;
+  font-family: var(--font1);
 }
 
-/*******************************************************
-  *
-  *              Image and Content Containers
-  *
-********************************************************/
-.image-container {
-  position: relative;
+.inventory-detail-card {
+  font-family: var(--font1);
+}
+
+.inventory-detail-card .image-box {
+  text-align: center;
+}
+.inventory-detail-card .image-box img {
+  width: 100%;
+  max-width: fit-content;
+  
+}
+
+.inventory-detail-card .detail-box {
+  flex-grow: 1;
+}
+
+.inventory-detail-card .detail-box > div {
+  padding: 5px;
+}
+
+.inventory-detail-card .detail-box > div:nth-child(even) {
+  background-color: #f8f5f5;
+}
+
+.form-container {
+  font-family: var(--font1);
+  max-width: 400px;
+  min-width: 100%;
+  margin: auto;
+}
+
+.form-container h1 {
+  font-family: var(--font2);
+  text-align: center;
+}
+.form-container form {
+  width: 100%;
+  max-width: 400px;
+  margin: auto;
+  background-color: rgb(241, 241, 241);
+  padding: 10px;
+}
+
+.form-container form > div {
+  padding-bottom: 10px;
+}
+
+.form-container form > div input {
+  font-size: 1rem;
+  padding: 5px;
+  border-radius: 5px;
+  border: .5px solid gray;
+}
+
+.form-container form .form-hint {
+  font-size: .7rem;
+}
+
+.form-container form input,
+.form-container form textarea {
+  width: 100%;
+  padding: 5px;
+}
+
+#classificationList {
+  width: 100%;
+  font-size: 1rem;
+  padding: 5px;
+  border-radius: 5px;
+  border: .5px solid gray;
+}
+
+.form-container form > div input:invalid {
+  border: .5px solid red;
+  background-color: rgb(241, 215, 215);
+}
+
+.form-container form > div textarea:invalid {
+  border: .5px solid red;
+  background-color: rgb(241, 215, 215);
+}
+.form-container form > div label.required:after {
+  content: " *";
+  color: red;
+}
+
+.form-container form .submit{
   display: flex;
   justify-content: center;
-  align-items: center;
-  margin-top: 20px;
+  padding-bottom: 0;
 }
 
-.image-container img {
-  max-width: 100%;
-  height: auto;
-  display: block;
-}
-
-.info-box {
-  position: absolute;
-  top: 60%; 
-  left: 30%; 
-  transform: translate(-50%, -50%); 
-  background-color: rgba(255, 255, 255, 0.8); 
-  padding: 20px;
-  border-radius: 8px;
-  text-align: center;
-  max-width: 300px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
-.info-box h2 {
-  font-size: 24px;
-  margin-bottom: 10px;
-  color: #666;
-}
-
-/* Upgrades and Reviews Styling */
-.columns-container {
-  display: flex;
-  justify-content: space-between;
-  gap: 20px; /* Space between the two columns */
-  margin-top: 30px;
-}
-
-/* Columns Style */
-.column {
-  flex: 1;
-  padding: 20px;
-  background-color: rgba(255, 255, 255, 0.8); 
-  border-radius: 8px;
-}
-
-/* Upgrade Grid (2x2) */
-.upgrade-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr); /* 2 columns */
-  gap: 20px; /* Space between grid items */
-}
-
-.upgrade-grid a {
-  text-align: center;
-  text-decoration: none;
-}
-
-.upgrade-grid img {
-  width: 100px;
-  height: 100px;
-  background-color: lightskyblue;
-  padding: 10px;
-  border-radius: 8px;
-}
-
-.upgrade-grid p {
-  margin-top: 10px;
-  font-size: 16px;
-  color: #333;
-}
-
-/* Review Column Style */
-.reviews-column ul {
-  list-style: none;
-  padding: 0;
-}
-
-.reviews-column li {
-  margin-bottom: 10px;
-  font-size: 16px;
-  line-height: 1.5;
-  color: #333;
-}
-
-/* Responsive Design */
-@media only screen and (max-width: 768px) {
-  .columns-container {
-    flex-direction: column; /* Stack the columns on smaller screens */
-  }
-}
-
-/*******************************************************
-  *              General Button Styling
-********************************************************/
-button, .classification-page__btn, .inventory-button, .own-today-btn, .form-button {
-  background-color: #666; /* Dark gray color */
+.form-container form > div input[type="submit"] {
+  border: 0px;
+  border-radius: 50px;
+  min-width: 100px;
+  width: fit-content;
+  /* background-color: #1677FF; */
+  background-color: #113be4;
   color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 4px;
-  font-size: 1rem;
   cursor: pointer;
-  transition: background-color 0.3s ease;
 }
 
-button:hover, .classification-page__btn:hover, .inventory-button:hover, .own-today-btn:hover, .form-button:hover {
-  background-color: lightblue; /* Light blue color on hover */
+.form-container form > div input[type="submit"]:disabled {
+  cursor: default;
+  background-color: #c2c4c9;
 }
 
-/* Vehicle Detail Container */
-.vehicle-detail-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 30px;
-  padding: 70px;
-  margin: 0 auto;
-  max-width: 1100px;
-  background-color: #ffffff;
-  border-radius: 10px;
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-/* Vehicle Image Styling */
-.vehicle-image {
-  flex: 1;
-  max-width: 400px; 
-}
-
-.vehicle-image img {
-  width: 100%;
-  height: auto;
-  border-radius: 10px;
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
-}
-
-/* Vehicle Info (Description, Price, Title, etc.) */
-.vehicle-info {
-  flex: 2; /* Make the text section take more space */
-  margin-left: 20px; /* Space between image and text */
-}
-
-.vehicle-info h1 {
-  font-size: 2.4em;
-  font-weight: bold;
-  color: black;
-  margin-bottom: 10px;
-}
-
-.vehicle-price {
-  font-size: 1.5em;
-  font-weight: bold;
-  color: #000c1a; /* Darker color for the price */
-  margin-bottom: 10px;
-}
-
-.vehicle-description {
-  font-size: 1.1em;
-  line-height: 1.5;
-  color: black;
-  margin-bottom: 15px;
-}
-
-.vehicle-details {
-  font-size: 1.1em;
-  color: black;
-}
-
-.vehicle-details p {
-  margin: 8px 0;
-}
-
-.vehicle-details strong {
-  font-weight: bold;
-}
-
-/* Back Link Styling */
-.back-link {
-  display: block;
-  margin-top: 20px;
-  font-size: 1em;
-  color: #666;
-  text-decoration: none;
-}
-
-.back-link:hover {
-  text-decoration: underline;
-}
-
-/*******************************************************
-  *              Add Classification Form Styling
-********************************************************/
-.classification-page {
-  padding: 20px;
-}
-
-.classification-page__form-container {
-  max-width: 500px;
-  margin: 0 auto;
-  padding: 20px;
-  background-color: #f8f9fa;
-  border-radius: 8px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
-
-.classification-page__label {
-  display: block;
-  font-size: 1rem;
-  color: #333;
-  margin-bottom: 5px;
-}
-
-.classification-page__description {
-  font-size: 0.9rem;
-  color: #666;
-  margin-bottom: 10px;
-}
-
-.classification-page__input {
-  width: 100%;
-  padding: 10px;
-  font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  margin-bottom: 15px;
-}
-
-.classification-page__input:focus {
-  border-color: lightblue;
-  outline: none;
-  box-shadow: 0 0 8px rgba(0, 123, 255, 0.25);
-}
-
-.classification-page__required-text {
-  font-size: 0.8rem;
-  color: #d9534f;
-  text-align: left;
-}
-
-/*******************************************************
-  *              Add Inventory Form Styling
-********************************************************/
-.inventory-form {
-  max-width: 700px;
-  margin: 0 auto;
-  padding: 20px;
-  background-color: #f8f9fa;
-  border-radius: 8px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
-
-.inventory-label {
-  display: block;
-  font-size: 1rem;
-  color: #333;
-  margin-bottom: 5px;
-}
-
-.inventory-input, .inventory-textarea, .inventory-select {
-  width: 100%;
-  padding: 10px;
-  font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  margin-bottom: 15px;
-}
-
-.inventory-textarea {
-  height: 100px;
-  resize: vertical;
-}
-
-.inventory-input:focus, .inventory-textarea:focus, .inventory-select:focus {
-  border-color: lightblue;
-  outline: none;
-  box-shadow: 0 0 8px rgba(0, 123, 255, 0.25);
-}
-
-/* Flash Messages */
-.flash-messages {
-  max-width: 700px;
-  margin: 20px auto;
-  padding: 10px;
-  background-color: #dff0d8;
-  border-left: 4px solid #3c763d;
-  border-radius: 4px;
-}
-
-.flash-message p {
-  font-size: 1rem;
-  color: #3c763d;
-}
-
-/*******************************************************
-  *              Management Page Styling
-********************************************************/
-.management-page {
-  padding: 20px;
+.sign-up {
   text-align: center;
 }
 
-.main-title {
-  font-size: 2em;
-  color: #333;
-  margin-bottom: 20px;
-  font-family: 'Arial', sans-serif;
+#messages ul {
+  list-style: none;
+  padding-left: 0;
 }
 
-/* Flash Messages */
-.flash-messages {
-  max-width: 700px;
-  margin: 20px auto;
-  padding: 10px;
-  background-color: #dff0d8;
-  border-left: 4px solid #3c763d;
-  border-radius: 4px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.flash-message p {
-  font-size: 1rem;
-  color: #3c763d;
-  margin: 0;
-}
-
-/* Button Links Styling */
-.management-page__links {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  margin-bottom: 30px;
-}
-
-.management-page__btn {
-  background-color: #666;
+.notice-success {
   color: white;
-  padding: 10px 20px;
+  background-color: #0db500;
+}
+
+.notice {
+  color: white;
+  background-color: #b50000;
+}
+
+.form-container .notice {
+  color: white;
+  background-color: #b50000;
+}
+
+.form-container .notice li {
+  list-style: none;
+}
+
+#inventory-management ul li {
+  list-style: none;
+  font-family: var(--font1);
+  padding-bottom: 15px;
+}
+
+#inventory-management p {
+  font-family: var(--font1);
+}
+
+#inventory-management #classificationList {
+  width: fit-content;
+}
+
+#inventory-management #inventoryDisplay {
+  font-family: var(--font1);
+  width: 400px;
+}
+
+
+#inventory-management #inventoryDisplay tbody tr:nth-child(odd) {
+  background-color: #f5f6f8;
+}
+
+#inventory-management #inventoryDisplay tbody tr:nth-child(even) {
+  background-color: white;
+}
+
+#inventory-management #inventoryDisplay td {
+  padding: 10px;
+}
+
+#inventory-management #inventoryDisplay td:nth-child(2), #inventory-management #inventoryDisplay td:nth-child(3) {
+  text-align: center;
+}
+
+#inventory-management #inventoryDisplay td:nth-child(2) a:link, #inventory-management #inventoryDisplay td:nth-child(3) a:link {
+  color: blue;
   text-decoration: none;
-  border-radius: 4px;
-  font-size: 1.1rem;
-  transition: background-color 0.3s ease;
-  border: none;
 }
 
-.management-page__btn:hover {
-  background-color: lightblue;
+#inventory-management #inventoryDisplay td:nth-child(2) a:visited, #inventory-management #inventoryDisplay td:nth-child(3) a:visited {
+  color: blue;
+  text-decoration: none;
 }
 
-/* Error Link Styling */
-.management-page__error-link {
-  display: block;
-  font-size: 1rem;
-  color: #d9534f;
+#inventory-management #inventoryDisplay td:nth-child(2) a:hover, #inventory-management #inventoryDisplay td:nth-child(3) a:hover {
   text-decoration: underline;
-  margin-top: 20px;
 }
 
-.management-page__error-link:hover {
-  color: #c9302c;
+#inventory-management .notice, #account-management .notice {
+  color: white;
+  background-color: #b50000;
+}
+
+
+
+#add-classification form > div > input:invalid {
+  border: .5px solid red;
+  background-color: rgb(241, 215, 215);
+}
+
+#add-classification form > div label.required:after {
+  content: " *";
+  color: red;
+}
+
+#account-management div {
+  font-family: var(--font1);
+}
+
+#edit-account h2 {
+  text-align: center;
+}
+
+#edit-account hr {
+  margin: 2rem;
+}
+
+#edit-account .danger-zone {
+  border: 1px solid #b50000;
+  width: fit-content; 
+  margin: auto;
+}
+
+#edit-account .danger-hint {
+  background-color: #b50000;
+  color: white;
+}
+
+#message-management table, #archive-management table {
+  width: fit-content;
+  margin: auto;
+  font-family: var(--font1);
+  font-size: .5rem;
+  border-collapse: collapse;
+}
+
+#message-management table th, #archive-management table th {
+  font-weight: bolder;
+  text-align: start;
+}
+
+#message-management table thead, #archive-management table thead {
+  border: 1px solid #ccc;
+}
+
+#message-management table tbody tr:nth-child(even), #archive-management table tbody tr:nth-child(even) {
+  background-color: #c2c4c9;
+}
+
+#message-management table td, #archive-management table td {
+  width: fit-content;
+  padding: 10px;
+}
+
+#message-management .ellipsis, #archive-management .ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100px;
+} 
+
+#add-message .reminder {
+  width: 400px;
+  margin: auto;
+}
+
+#add-message select {
+  font-size: 1rem;
+  width: 100%;
+}
+
+#read-message .message-box {
+  background-color: #eee;
+  box-shadow: 4px 4px 4px #ccc;
+  padding: 10px;
+}
+
+#read-message hr {
+  margin: 20px 0px;
+}
+
+#read-message .btn-box {
+  text-align: center;
+}
+
+#read-message .message-box > div {
+  padding: 6px;
+}
+
+#read-message .btn-link {
+  display: inline-block;
   text-decoration: none;
+  margin: 10px 5px;
+  padding: 10px 20px;
+  cursor: pointer;
 }
 
-/*******************************************************
-  *              Media Queries for Responsive Design
-********************************************************/
+#read-message .btn-link:not([disabled]):hover {
+  text-decoration: underline;
+}
 
-/* Mobile screens (small sizes) */
-@media only screen and (max-width: 600px) {
-  body {
-    background-image: url('/images/site/checkerboard.jpg');
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-position: center;
-    margin: 0;
-  }
+#read-message .btn-link[disabled] {
+  cursor: not-allowed;
+}
 
-  #wrapper {
-    background-color: white;
-    padding: 10px;
-    margin: 0;
-    width: 100%;
-  }
+#archive-management > div {
+  margin: 10px 0px;
+}
+/* -----end of body styles----- */
 
-  nav {
-    padding: 5px 10px;
-    flex-direction: row;
-  }
+/* -----footer styles----- */
+footer p {
+  font-family: var(--font1);
+  text-align: center;
+}
+/* -----end of footer styles----- */
 
-  nav a {
-    font-size: 14px;
-    margin: 0 10px;
-  }
 
-  nav ul {
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
-  #top-header {
-    flex-direction: column;
-    font-size: 20px;
-    align-items: center;
-    text-align: center;
-  }
-
+/* -----RWD----- */
+@media screen and (min-width: 760px) {
   #inv-display {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* Tablet screens (medium sizes) */
-@media only screen and (max-width: 1024px) {
-  body {
-    background-image: url('/images/site/checkerboard.jpg');
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-position: center;
-    margin: 0;
-  }
-
-  #wrapper {
-    background-color: white;
-    padding: 10px;
-    margin: 0;
-    width: 100%;
-  }
-
-  nav {
-    padding: 10px;
-  }
-
-  nav a {
-    font-size: 16px;
-    padding: 5px 10px;
-  }
-
-  nav ul {
-    font-size: 16px;
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
-    padding: 0;
+    flex-wrap: wrap;
+    justify-content: flex-start;
   }
 
+  .inventory-detail-card {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    padding: 20px;
+  }
+
+}
+
+@media screen and (min-width: 460px) {
+  nav #nav-btn {
+    display: none;
+  }
+  nav ul {
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+  }
+  
   nav ul li {
-    margin: 0;
+    padding: 5px 10px;
   }
 
-  #inv-display {
-    grid-template-columns: 1fr 1fr;
+  .info-container {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-around;
   }
-}
-
-@media screen and (max-width: 480px) {
-  .login-form {
-    max-width: 100%;
-    margin: 10px;
-    padding: 10px;
+  .hero-description {
+    top: 10px;
+    left: 25px;
+    line-height: 60%;
+    font-size: 16px;
   }
-
-  .login-title {
-    font-size: 1.3em;
-  }
-}
-
-@media (max-width: 768px) {
-  .registration-form {
-    padding: 15px;
+  .hero-car {
+    max-width: 500px;
+    width: 90%;
   }
 
-  .registration-input {
-    font-size: 0.9rem;
+  #message-management table, #archive-management table {
+    width: 90%;
+    font-size: 1rem;
+  }
+
+  #message-management table th:first-child {
+    width: 35%;
+  }
+  
+  #message-management table th:nth-child(2) {
+    width: 35%;
+  }
+
+  #read-message .message-box {
+    width: 90%;
+    margin: auto;
   }
 }

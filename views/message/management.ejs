@@ -1,0 +1,35 @@
+
+<div id="message-management">
+    <h1><%= title %></h1>
+
+    <%- messages() %>
+
+    <% if (errors) { %>
+        <ul class="notice">
+            <% errors.array().forEach(error => { %>
+                <li><%= error.msg %></li>
+            <% }) %>
+        </ul>
+    <% } %>
+
+    <ul class="font-1">
+        <li><a href="/message/add-message">Create New Message</a></li>
+        <li><a href="/message/archive">View Archived Messages</a></li>
+    </ul>
+    
+    <div>
+        <table>
+            <thead>
+                <tr>
+                    <th class="ellipsis">Received</th>
+                    <th class="ellipsis">Subject</th>
+                    <th>From</th>
+                    <th>Read</th>
+                </tr>
+            </thead>
+            <tbody>
+                <%- msgTable %>
+            </tbody>
+        </table>
+    </div>
+</div>

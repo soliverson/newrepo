@@ -1,103 +1,64 @@
-
-<% if (title) { %>
+<div id="updateForm" class="form-container">
     <h1><%= title %></h1>
-    <% } else { res.redirect('/') } %> <%- messages() %> <% if (errors) { %>
-    <ul class="notice">
-      <% errors.array().forEach(error => { %>
-      <li><%= error.msg %></li>
-      <% }) %>
-    </ul>
-    <% } %>
-    
-    <div class="form-shape add-inventory">
-      <form action="/inv/update" method="post" id="carForm">
-        <label for="classification_id">Classification</label>
-        <%- classificationSelect %>
-        <label
-          >Make:<input
-            type="text"
-            name="inv_make"
-            required
-            value="<%= locals.inv_make %>"
-            placeholder="e.g. Toyota"
-        /></label>
-        <label
-          >Model:<input
-            type="text"
-            name="inv_model"
-            required
-            value="<%= locals.inv_model %>"
-            placeholder="e.g. Corolla"
-        /></label>
-        <label
-          >Year:<input
-            type="text"
-            name="inv_year"
-            required
-            pattern="^\d+$"
-            minlength="4"
-            maxlength="4"
-            value="<%= locals.inv_year %>"
-            placeholder="e.g 2024"
-        /></label>
-        <label
-          >Description:<textarea
-            name="inv_description"
-            required
-            rows="4"
-            cols="50"
-            placeholder="Tell me more about the car"
-          >
-    <%= locals.inv_description %></textarea
-          >
-        </label>
-        <label
-          >Image Path:<input
-            type="text"
-            name="inv_image"
-            required
-            pattern="\/images\/vehicles\/[a-zA-Z0-9_-]+\.(jpg|jpeg|png|gif)"
-            value="<%= locals.inv_image %>"
-            title="The path must start with /images/vehicles/ at the beginning followed by the name and ending with the extension (jpg|jpeg|png|gif)"
-            placeholder="e.g. /images/vehicles/name-of-the-car.png"
-        /></label>
-        <label
-          >Thumbnail Path:<input
-            type="text"
-            name="inv_thumbnail"
-            required
-            pattern="\/images\/vehicles\/[a-zA-Z0-9_-]+\.(jpg|jpeg|png|gif)"
-            value="<%= locals.inv_thumbnail %>"
-            title="The path must start with /images/vehicles/ at the beginning followed by the name and ending with the extension (jpg|jpeg|png|gif)"
-            placeholder="e.g. /images/vehicles/name-of-the-car.png"
-        /></label>
-        <label
-          >Price:<input
-            type="number"
-            name="inv_price"
-            required
-            value="<%= locals.inv_price %>"
-            placeholder="e.g. 35000"
-        /></label>
-        <label
-          >Miles:<input
-            type="number"
-            name="inv_miles"
-            required
-            value="<%= locals.inv_miles %>"
-            placeholder="e.g. 180000"
-        /></label>
-        <label
-          >Color:<input
-            type="text"
-            name="inv_color"
-            required
-            value="<%= locals.inv_color %>"
-            placeholder="e.g. Red"
-        /></label>
-        <button type="submit">Update Vehicle</button>
-        <input type="hidden" name="inv_id" <% if(locals.inv_id){%>
-        value="<%=locals.inv_id %>" <% } %>>
-      </form>
-    </div>
-    
+
+    <%- messages() %>
+
+    <form action="/inv/update" method="post">
+        <% if (errors) { %>
+            <ul class="notice">
+                <% errors.array().forEach(error => { %>
+                    <li><%= error.msg %></li>
+                <% }) %> 
+            </ul>
+        <% } %>
+
+        <div>
+            <label for="classificationList" class="required">Classification</label><br>
+            <%- classificationSelect %>
+        </div>
+        <div>
+            <label for="inv_make" class="required">Make</label><br>
+            <input type="text" id="inv_make" name="inv_make" minlength="3" placeholder="Min of 3 characters" required value="<%= locals.inv_make %>">
+        </div>
+        <div>
+            <label for="inv_model" class="required">Model</label><br>
+            <input type="text" id="inv_model" name="inv_model" minlength="3" placeholder="Min of 3 characters" required value="<%= locals.inv_model %>">
+        </div>
+        <div>
+            <label for="inv_description" class="required">Description</label><br>
+            <textarea id="inv_description" name="inv_description" rows="3" required><%= locals.inv_description %></textarea>
+        </div>
+        <div>
+            <label for="inv_image" class="required">Image Path</label><br>
+            <input type="text" id="inv_image" name="inv_image" value="<%= locals.inv_image %>" required>
+        </div>
+        <div>
+            <label for="inv_thumbnail" class="required">Thumbnail Path</label>
+            <input type="text" id="inv_thumbnail" name="inv_thumbnail" value="<%= locals.inv_thumbnail %>" required>
+        </div>
+        <div>
+            <label for="inv_price" class="required">Price</label><br>
+            <input type="number" id="inv_price" name="inv_price" min="0" placeholder="decimal or integer" required value="<%= locals.inv_price %>">
+        </div>
+        <div>
+            <label for="inv_year" class="required">Year</label><br>
+            <input type="number" id="inv_year" name="inv_year" placeholder="4-digit year" min="1000" max="<%= new Date().getFullYear() %>" required value="<%= locals.inv_year %>">
+        </div>
+        <div>
+            <label for="inv_miles" class="required">Miles</label><br>
+            <input type="number" id="inv_miles" name="inv_miles" min="0" placeholder="digits only" required value="<%= locals.inv_miles %>">
+        </div>
+        <div>
+            <label for="inv_color" class="required">Color</label>
+            <input type="text" id="inv_color" name="inv_color" pattern="[A-Za-z\s]+" required value="<%= locals.inv_color %>">
+        </div>
+        <div class="submit">
+            <input type="submit" name="submit" value="Update Vehicle">
+        </div>
+        <div>
+            <input type="hidden" name="inv_id" value="<%= locals.inv_id %>">
+        </div>
+    </form>
+</div>
+
+<script src="../../js/inv-update.js"></script>

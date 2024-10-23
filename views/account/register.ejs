@@ -1,44 +1,51 @@
 <% if (title) { %>
     <h1><%= title %></h1>
-    <% } else { res.redirect('/') } %> <%- messages() %> <% if (errors) { %>
+<% } else { res.redirect('/') } %>
+<%- messages() %>
+<% if (errors) { %>
     <ul class="notice">
-      <% errors.array().forEach(error => { %>
-      <li><%= error.msg %></li>
-      <% }) %>
+        <% errors.array().forEach(error => { %>
+            <li><%= error.msg %></li>
+        <% }) %>
     </ul>
-    <% } %>
-    <div class="form-shape">
-      <form action="/account/register" method="post" id="registerForm">
-        <label
-          >First Name<input
-            type="text"
-            required
-            name="account_firstname"
-            value="<%= locals.account_firstname %>"
-        /></label>
-        <label
-          >Last Name<input
-            type="text"
-            required
-            name="account_lastname"
-            value="<%= locals.account_lastname %>"
-        /></label>
-        <label
-          >Email Address<input
-            type="email"
-            required
-            name="account_email"
-            value="<%= locals.account_email %>"
-        /></label>
-        <label
-          >Password<input
-            type="password"
-            required
-            minlength="12"
-            pattern="(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{12,}"
-            title="Password must contain at least one uppercase letter, one number, one special character, and be at least 12 characters long."
-            name="account_password"
-        /></label>
+<% } %>
+<div class="form-shape">
+    <form action="/account/register" method="post" id="registerForm">
+        <label>
+            First Name<input
+                type="text"
+                required
+                name="account_firstname"
+                value="<%= locals.account_firstname %>"
+            />
+        </label>
+        <label>
+            Last Name<input
+                type="text"
+                required
+                name="account_lastname"
+                value="<%= locals.account_lastname %>"
+            />
+        </label>
+        <label>
+            Email Address<input
+                type="email"
+                required
+                name="account_email"
+                value="<%= locals.account_email %>"
+            />
+        </label>
+        <label for="accountPassword">
+            Password<input
+                type="password"
+                required
+                id="accountPassword"
+                name="account_password"
+                pattern="^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{12,}$"
+                title="Password must contain at least one uppercase letter, one number, one special character, and be at least 12 characters long."
+            />
+        </label>
+        <span>Passwords must be at least 12 characters and contain at least 1 number, 1 capital letter, and 1 special character.</span>
         <button type="submit">Register</button>
-      </form>
-    </div>
+    </form>
+</div>

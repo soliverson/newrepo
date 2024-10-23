@@ -1,54 +1,23 @@
-<% if (title) { %>
+<div class="form-container">
     <h1><%= title %></h1>
-    <% } else { res.redirect('/') } %> <%- messages() %> <% if (errors) { %>
-    <ul class="notice">
-      <% errors.array().forEach(error => { %>
-      <li><%= error.msg %></li>
-      <% }) %>
-    </ul>
-    <% } %>
-    
-    <p>Confirm Deletion - The delete is permanent.</p>
-    
-    <div class="form-shape add-inventory">
-      <form action="/inv/delete-vehicle" method="post" id="carForm">
-        <label
-          >Make:<input
-            type="text"
-            name="inv_make"
-            required
-            value="<%= locals.inv_make %>"
-            readonly
-        /></label>
-        <label
-          >Model:<input
-            type="text"
-            name="inv_model"
-            required
-            value="<%= locals.inv_model %>"
-            readonly
-        /></label>
-        <label
-          >Year:<input
-            type="text"
-            name="inv_year"
-            required
-            pattern="^\d+$"
-            minlength="4"
-            maxlength="4"
-            value="<%= locals.inv_year %>"
-            readonly
-        /></label>
-        <label
-          >Price:<input
-            type="number"
-            name="inv_price"
-            required
-            value="<%= locals.inv_price %>"
-            readonly
-        /></label>
-        <button type="submit">Delete Vehicle</button>
-        <input type="hidden" name="inv_id" <% if(locals.inv_id){%>
-        value="<%=locals.inv_id %>" <% } %>>
-      </form>
-    </div>
+    <%- messages() %>
+
+    <form action="/inv/add-classification" method="post">
+        <% if (errors) { %>
+            <ul class="notice">
+                <% errors.array().forEach(error => { %>
+                    <li><%= error.msg%></li>
+                <% }) %>
+            </ul>
+        <% } %>
+        
+        <div>
+            <label for="classification_name" class="required">Classification Name</label><br>
+            <span class="form-hint">Name must be alphabetic characters only</span>
+            <input type="text" id="classification_name" name="classification_name" pattern="[a-zA-Z]+" value="<%= locals.classification_name %>" required>
+        </div>
+        <div class="submit">
+            <input type="submit" value="Add Classification">
+        </div>
+    </form>
+</div>

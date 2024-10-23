@@ -1,0 +1,53 @@
+<div id="read-message">
+    <h1><%= title %></h1>
+
+    <%- messages() %>
+
+    <% if (errors) { %>
+        <ul class="notice">
+            <% errors.array().forEach(error => { %>
+                <li><%= error.msg %></li>
+            <% }) %>
+        </ul>
+    <% } %>
+
+    <div class="message-box font-1">
+        <div>
+            <span><strong>Subject: </strong></span>
+            <span><%= subject %></span>
+        </div>
+        <div>
+            <span><strong>From: </strong></span>
+            <span><%= sender_name %> </span>
+        </div>
+        <div>
+            <span><strong>Message: </strong></span><br>
+            <span><%= content %> </span>
+        </div>
+    </div>
+    <hr>
+    <div><a href="/message">Return to Inbox</a></div>
+    <div class="font-1 btn-box">
+        <button class="btn-link" title="Reply to this message" onclick="reply('<%= message_id %>')">
+            Reply   
+        </button>
+        <form action="/message/mark-read" method="POST" style="display: inline;">
+            <input type="hidden" name="message_id" value="<%= message_id %>">
+            <button type="submit" title="Mark message as read" class="btn-link" <%= message_read ? 'disabled' : '' %>>Mark as Read</button>
+        </form>
+        <form action="/message/archive" method="POST" style="display: inline;">
+            <input type="hidden" name="message_id" value="<%= message_id %>">
+            <button type="submit" title="Archive message" class="btn-link" <%= message_archived ? 'disabled' : '' %>>Archive Message</button>
+        </form>
+        <form action="/message/delete" method="POST" style="display: inline;">
+            <input type="hidden" name="message_id" value="<%= message_id %>">
+            <button type="submit" title="Delete Message" class="btn-link">Delete Message</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    function reply(message_id) {
+        window.location.href = `/message/reply/<%= message_id %>`
+    }
+</script>

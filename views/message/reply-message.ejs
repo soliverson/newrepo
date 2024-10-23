@@ -1,0 +1,45 @@
+<div id="reply-message" class="form-container">
+    <h1><%= title %></h1>
+    
+    <%- messages() %>
+
+    <form action="/message/reply-message" method="post" id="msgForm">
+        <% if (errors) { %>
+            <ul class="notice">
+                <% errors.array().forEach(error => { %>
+                    <li><%= error.msg %></li>
+                <% }) %>
+            </ul>
+        <% } %>
+        <div>
+            <label for="message_to" class="required">To</label><br>
+            <select name="message_to"><option value="<%= receiver_id %> "><%= receiver_name %></option></select>
+        </div>
+        <div>
+            <label for="message_subject" class="required">Subject</label><br>
+            <input type="text" id="message_subject" name="message_subject" placeholder="Enter subject" required value="<%= locals.message_subject %>">
+        </div>
+        <div>
+            <label for="message_body" class="required">Message</label><br>
+            <textarea id="message_body" name="message_body" rows="5" placeholder="Start your message here..." required>
+<%= message_body %>
+            </textarea>
+        </div>
+        <div class="submit">
+            <input type="submit" value="Send">
+        </div>
+        <div>
+            <input type="hidden" name="message_from" value="<%= sender_id %>">
+            <input type="hidden" id="message_created" name="message_created">
+        </div>
+    </form>
+</div>
+
+<script>
+    const msgForm = document.getElementById("msgForm")
+    msgForm.addEventListener("submit", () => {
+        const now = new Date().toISOString();
+        const messageCreated = document.getElementById("message_created")
+        messageCreated.value = now
+    })
+</script>
