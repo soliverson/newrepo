@@ -3,8 +3,7 @@
         <h1><%= title %></h1>
     <% } %>
 
-    <h2>Welcome <%= accountData.account_firstname %></h2> <!-- Use accountData for firstname -->
-
+    <h2>Welcome <%= accountData.account_firstname %></h2>
     <%- messages() %>
 
     <% if (errors) { %>
@@ -17,7 +16,11 @@
 
     <%- link %>
     <br>
-
+    <p>
+        <a href="/feedback" class="hero-button">Leave Feedback</a>
+    
+        <a href="/feedback/view" class="hero-button">View All Feedback</a>
+    </p>
     <h3>Message Center</h3>
     <ul>
         <li class="font-1">You have <%= unreadMsgNum %> unread messages</li>
@@ -30,5 +33,6 @@
             <h3>Inventory Management</h3>
             <div><a href="/inv">Manage Inventory</a></div>
         </div>
+
     <% } %>
 </div>

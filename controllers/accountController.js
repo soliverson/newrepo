@@ -105,10 +105,15 @@ async function accountLogin(req, res) {
             delete accountData.account_password;
             const accessToken = jwt.sign(accountData, process.env.ACCESS_TOKEN_SECRET, { expiresIn: 3600 });
             
+            // Set JWT cookie
             res.cookie("jwt", accessToken, { httpOnly: true, secure: process.env.NODE_ENV !== 'development', maxAge: 3600 * 1000 });
             req.flash("notice-success", "You have logged in.");
             res.locals.account_firstname = accountData.account_firstname;
-            res.redirect("/account/");
+
+            // Redirect to original requested page or default to account management
+            const redirectUrl = req.session.returnTo || '/account'; 
+            delete req.session.returnTo; // Clear the returnTo session variable after use
+            res.redirect(redirectUrl);  // Redirect after login
         } else {
             req.flash("notice", "Sorry, Invalid email or password.");
             res.status(401).render("account/login", {

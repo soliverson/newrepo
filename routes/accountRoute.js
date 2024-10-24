@@ -71,4 +71,10 @@ router.post(
   utilities.handleErrors(accountController.deleteAccount)
 );
 
+// Redirect to feedback page if logged in
+router.get('/feedback', 
+  utilities.checkLogin, // Ensure user is logged in
+  utilities.handleErrors(accountController.feedbackPage) // Handle feedback page rendering
+);
+
 module.exports = router;

@@ -43,6 +43,20 @@ async function getAccountById(account_id) {
 }
 
 /* ***************************
+ *  Check if an email already exists
+ * ************************** */
+async function checkExistingEmail(account_email) {
+    try {
+        const sql = "SELECT * FROM public.account WHERE account_email = $1";
+        const result = await pool.query(sql, [account_email]);
+        return result.rows.length > 0; // Return true if email exists, false otherwise
+    } catch (error) {
+        console.error("Error checking existing email:", error);
+        throw error;
+    }
+}
+
+/* ***************************
  *  Update account information
  * ************************** */
 async function updateAccount(account_firstname, account_lastname, account_email, account_id) {
@@ -68,10 +82,12 @@ async function deleteAccount(account_id) {
     }
 }
 
+/* Export all functions */
 module.exports = {
     registerAccount,
     getAccountByEmail,
     getAccountById,
+    checkExistingEmail,  // Now included in the export
     updateAccount,
     deleteAccount,
 };

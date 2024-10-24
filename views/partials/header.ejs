@@ -5,7 +5,7 @@
     <div id="tools">
         <% if (locals.loggedin) { %>
             <a title="Click to manage your account" href="/account">Welcome <%= locals.accountData.account_firstname %></a>
-            <span> | </span>
+            <br>
             <a href="/account/logout">Logout</a>
         <% } else { %>
                 <a title="Click to Log in" href="/account/login">My Account</a>

@@ -506,6 +506,33 @@ nav ul a:hover {
 #archive-management > div {
   margin: 10px 0px;
 }
+span:empty {
+  display: none; /* Hide any empty spans */
+}
+.feedback-container {
+  display: flex; /* Use flexbox for layout */
+  justify-content: flex-end; /* Align items to the right */
+  margin: 2y0px; /* Add margin for spacing */
+}
+
+.feedback-button {
+  position: absolute;   /* Absolute positioning */
+  right: 100px;         /* Distance from the right edge */
+  bottom: -110px;       
+  padding: 10px 20px; /* Adds space around the text */
+  background-color: #113be4; /* Match the blue color */
+  color: white; /* Text color */
+  text-align: center; /* Center the text */
+  border-radius: 50px; /* Rounded edges */
+  text-decoration: none; /* Remove underline */
+  transition: background-color 0.3s; /* Smooth background color transition */
+}
+
+.feedback-button:hover {
+  background-color: #0db500; /* Change color on hover */
+  cursor: pointer; /* Change the cursor to pointer on hover */
+}
+
 /* -----end of body styles----- */
 
 /* -----footer styles----- */

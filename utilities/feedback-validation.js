@@ -1,15 +1,10 @@
+const utilities = require("../utilities");
 const { body, validationResult } = require("express-validator");
 const validate = {};
 
 // Validation rules for feedback submission
 validate.feedbackRules = () => {
     return [
-        body("feedback_name")
-            .trim()
-            .notEmpty().withMessage("Your name is required."),
-        body("feedback_email")
-            .isEmail().withMessage("Email format is not correct.")
-            .notEmpty().withMessage("Email is required."),
         body("comments")
             .trim()
             .notEmpty().withMessage("Comments are required.")

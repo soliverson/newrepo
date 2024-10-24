@@ -1,17 +1,28 @@
 const pool = require("../database");
 
-// Add feedback
+/* ***************************
+ *  Add feedback to the database
+ * ************************** */
 async function addFeedback(user_id, comments, rating) {
-    const sql = "INSERT INTO feedback (user_id, comments, rating) VALUES ($1, $2, $3) RETURNING feedback_id";
-    const result = await pool.query(sql, [user_id, comments, rating]);
-    return result.rows[0].feedback_id;
+    try {
+        const sql = "INSERT INTO feedback (user_id, comments, rating) VALUES ($1, $2, $3)";
+        await pool.query(sql, [user_id, comments, rating]);
+    } catch (error) {
+        console.error("Error adding feedback:", error);
+        throw error;
+    }
 }
 
-// Get feedback by user ID
-async function getFeedbackByUserId(user_id) {
-    const sql = "SELECT * FROM feedback WHERE user_id = $1 ORDER BY created_at DESC";
-    const result = await pool.query(sql, [user_id]);
-    return result.rows;
+/* ***************************
+ *  Get all feedback
+ * ************************** */
+async function getAllFeedback() {
+    const sql = "SELECT * FROM feedback ORDER BY created_at DESC";
+    const result = await pool.query(sql);
+    return result.rows; // Return all feedback rows
 }
 
-module.exports = { addFeedback, getFeedbackByUserId };
+module.exports = {
+    addFeedback,
+    getAllFeedback,
+};
